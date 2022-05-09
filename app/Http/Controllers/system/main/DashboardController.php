@@ -24,12 +24,12 @@ class DashboardController extends Controller
 
             $user_id = Session::get('user')['user_id'];// get user id by session
 
-            $new_tasks_count = $TasksModel->get_all_new_tasks_count_by_user_id($user_id);// Get New Task Count
-            $open_tasks_count = $TasksModel->get_all_open_tasks_count_by_user_id($user_id);// Get Opened Task Count
-            $inprogress_tasks_count = $TasksModel->get_all_inprogress_tasks_count_by_user_id($user_id);// Get Inprogress Task Count
-            $completed_tasks_count = $TasksModel->get_all_completed_tasks_count_by_user_id($user_id);// Get Completed Task Count
+            $new_tasks_count = 0;//$TasksModel->get_all_new_tasks_count_by_user_id($user_id);// Get New Task Count
+            $open_tasks_count = 0;//$TasksModel->get_all_open_tasks_count_by_user_id($user_id);// Get Opened Task Count
+            $inprogress_tasks_count = 0;//$TasksModel->get_all_inprogress_tasks_count_by_user_id($user_id);// Get Inprogress Task Count
+            $completed_tasks_count = 0;//$TasksModel->get_all_completed_tasks_count_by_user_id($user_id);// Get Completed Task Count
 
-            $pending_tasks = $TasksModel->get_all_pending_task_by_user_id($user_id);// Get All the Pending Tasks(Not Completed)
+            $pending_tasks = array();//$TasksModel->get_all_pending_task_by_user_id($user_id);// Get All the Pending Tasks(Not Completed)
 
             $data['page_title'] = 'Dashboard';// Define Page Title
             $data['pending_tasks'] = $pending_tasks;// Put Pending Task to $data array

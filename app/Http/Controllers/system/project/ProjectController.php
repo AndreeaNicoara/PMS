@@ -11,6 +11,11 @@ use View;
 use App\Models\UsersModel;
 use App\Models\ProjectsModel;
 use App\Models\ProjectUsersModel;
+use App\Models\ProjectMembersModel;
+use App\Models\ProjectTasksModel;
+use App\Models\ApiTemplatesItemsModel;
+use App\Models\ProjectRolesModel;
+use App\Models\ProjectTechnologiesModel;
 use Session;
 //-- Dush 2022.05.03 CLOSED--//
 
@@ -48,77 +53,125 @@ class ProjectController extends Controller
     public function addProjectProcess(Request $request)
     {
         $ProjectsModel = new ProjectsModel();//Load Model
+        
         $session = session();//Session Initialized
 
-        //Assign Data To Variable
-        $project_name= $request->get('project_name');
-        $start_date= $request->get('start_date');
-        $end_date= $request->get('end_date');
-        $total_hours= $request->get('total_hours');
-        $project_manager_id= $request->get('project_manager_id');
-        $project_type= $request->get('project_type');
-        $status= $request->get('status');
+        // define variable with project data
+        $project_type   = $request->get('project_type');
+        $project_name   = $request->get('project_name');
+        $project_code   = $request->get('project_code');
+        $project_description = $request->get('project_description');
+        $start_date = $request->get('start_date');
+        $end_date   = $request->get('end_date');
+        $total_hours    = $request->get('total_hours');
+        $stakeholders  = $request->get('stakeholders');
+        $project_leader = $request->get('project_leader');
+        $github_repository=$request->get('github_repository');
 
-        //Input Validations
-        $validator = Validator::make($request->all(), [
-            'project_name' => 'required|min:2|max:200',//Validation Rule
-            'start_date' => 'required',//Validation Rule
-            'end_date' => 'required',//Validation Rule
-            'total_hours' => 'required',//Validation Rule
-            'project_manager_id' => 'required',//Validation Rule
-            'project_type' => 'required',//Validation Rule
-            'status' => 'required',//Validation Rule
-        ],
-        [
-            'project_name.required' => 'Project name is required',//Validation Message
-            'project_name.min' => 'Project name must be at least 2 characters length',//Validation Message
-            'project_name.max' => 'First name cannot be exceed 200 characters length',//Validation Message
-            'start_date.required' => 'Start date is required',//Validation Message
-            'end_date.required' => 'End date is required',//Validation Message
-            'total_hours.required' => 'Total hour is required',//Validation Message
-            'project_manager_id.required' => 'Project manager is required',//Validation Message
-            'project_type.required' => 'Project type is required',//Validation Message
-            'status.required' => 'Status is required',//Validation Message
-            
-        ]);
+        // define variable with project array data
+        $project_members= $request->get('project_members');
+        $project_tasks= $request->get('project_tasks');
+        $api_templates=$request->get('api_templates');
 
-        if ($validator->fails()) {// If Validation Failure
-            // Failure Response Message
-            return Response::json(array(
-                'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
+        $selected_member_ids = $request->get('selected_member_ids');
+        $selected_roles = $request->get('selected_roles');
+        $selected_estimate_hours = $request->get('selected_estimate_hours');
 
-            ), 422);
-        }else{// If Validation Not Failure
-            // Assign All Data to Model
-            $ProjectsModel->project_name = $project_name;
-            $ProjectsModel->start_date = $start_date;
-            $ProjectsModel->end_date = $end_date;
-            $ProjectsModel->total_hours = $total_hours;
-            $ProjectsModel->project_manager_id = $project_manager_id;
-            $ProjectsModel->project_type = $project_type;
-            $ProjectsModel->status = $status;
-            $ProjectsModel->added_by = Session::get('user')['user_id'];
-            $ProjectsModel->added_date = date("Y-m-d H:i:s");
+        $project_technologies=$request->get('project_technologies');
+       
+        $status= "0";
 
-            $added=$ProjectsModel->save();
+        // Insert Project Table
+        $ProjectsModel->project_code = $project_code;
+        $ProjectsModel->project_name = $project_name;
+        $ProjectsModel->project_description = $project_description;
+        $ProjectsModel->start_date = $start_date;
+        $ProjectsModel->end_date = $end_date;
+        $ProjectsModel->total_hours = $total_hours;
+        $ProjectsModel->stakeholder = $stakeholders;
+        $ProjectsModel->git_repository= $github_repository;  
+        $ProjectsModel->leader_id = $project_leader;
+        $ProjectsModel->project_type = $project_type;
+        $ProjectsModel->status = $status;
+        $ProjectsModel->added_by = Session::get('user')['user_id'];
+        $ProjectsModel->added_date = date("Y-m-d H:i:s");
 
-            if($added){
-                // Success Response Message
-                $response = array(
-                    'status' => true,
-                    'message' => "Project added successfully."
-                );
-            }else{
-                // Failure Response Message
-                $response = array(
-                    'status' => false,
-                    'message' => "Something went wrong."
-                );
+        $project_added=$ProjectsModel->save();
+        $project_id = $ProjectsModel->id;//get last inserted id
+
+        // Insert Project Member Table
+        foreach($project_members as $pm_key => $project_member){
+            if($project_member!=""){
+                $ProjectMembersModel = new ProjectMembersModel();//Load Model
+                $ProjectMembersModel->project_id = $project_id;
+                $ProjectMembersModel->member_id = $project_member;
+                $project_members_added=$ProjectMembersModel->save();
+                
             }
-
-            echo json_encode($response);
+            
         }
+        // Insert Project Tasks Table
+        foreach($project_tasks as $pt_key => $project_task){
+            if($project_task!=""){
+                $ProjectTasksModel = new ProjectTasksModel();//Load Model
+                $ProjectTasksModel->project_id = $project_id;
+                $ProjectTasksModel->project_task = $project_task;
+                $ProjectTasksModel->added_by = Session::get('user')['user_id'];
+                $ProjectTasksModel->added_date = date("Y-m-d H:i:s");
+                $project_tasks_added=$ProjectTasksModel->save();
+                
+            }
+            
+        }
+        // Insert API Templates Items Table
+        foreach($api_templates as $ati_key => $api_template){
+            if($api_template!=""){
+                $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
+                $ApiTemplatesItemsModel->project_id = $project_id;
+                $ApiTemplatesItemsModel->template_item = $api_template;
+                $ApiTemplatesItemsModel->added_by = Session::get('user')['user_id'];
+                $ApiTemplatesItemsModel->added_date = date("Y-m-d H:i:s");
+                $api_template_items_added=$ApiTemplatesItemsModel->save();
+                
+            }
+            
+        }
+
+        // Insert Project Roles Table
+        foreach($selected_member_ids as $pr_key => $selected_member_id){
+            if($selected_member_id!=""){
+                $ProjectRolesModel = new ProjectRolesModel();//Load Model
+                $ProjectRolesModel->project_id = $project_id;
+                $ProjectRolesModel->member_id = $selected_member_id;
+                $ProjectRolesModel->project_role = $selected_roles[$pr_key];
+                $ProjectRolesModel->estimate_hours = $selected_estimate_hours[$pr_key];
+                $project_roles_added=$ProjectRolesModel->save();
+                
+            }
+            
+        }
+
+
+        // Insert Project Technologies Table
+        foreach($project_technologies as $pr_key => $project_technology){
+            if($project_technology!=""){
+                $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+                $ProjectTechnologiesModel->project_id = $project_id;
+                $ProjectTechnologiesModel->technology_name = $project_technology;
+                $ProjectTechnologiesModel->added_by = Session::get('user')['user_id'];
+                $ProjectTechnologiesModel->added_date = date("Y-m-d H:i:s");
+                $project_technology_added=$ProjectTechnologiesModel->save();
+                
+            }
+            
+        }
+
+        $response = array(
+            'status' => true,
+            'message' => "Project added successfully."
+        );
+
+        echo json_encode($response);
     }
 
     // Edit Project Ajax Page
@@ -262,33 +315,37 @@ class ProjectController extends Controller
         <div class="row">
             <div class="col-lg-4">
                 <div class="form-group">
-                    <label for="inputProjectMemberList" class="wizard-form-text-label">Project Member</label>
+                    <label for="inputProjectMemberList">Project Member</label>
                     <select class="form-control" id="inputProjectMemberList" name="project_member_list" placeholder="">
                         <option value=""></option>
                         <?php foreach($project_selected_members as $project_selected_member){?>
                         <option value="<?php echo $project_selected_member->user_id;?>"><?php echo $project_selected_member->first_name.' '.$project_selected_member->last_name;?></option>
                         <?php } ?>
                     </select>
+                    <span class="text-danger input-error project_member_list-error wizard-form-error"></span>
                     
                 </div>
             </div>
 
             <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="inputProjectMemberRole" class="wizard-form-text-label">Project Role</label>
+                    <label for="inputProjectMemberRole" >Project Role</label>
                     <input type="text" class="form-control" id="inputProjectMemberRole" name="project_member_role" placeholder="">
+                    <span class="text-danger input-error project_member_role-error wizard-form-error"></span>
                 </div>
             </div>
 
             <div class="col-lg-3">
                 <div class="form-group">
-                    <label for="inputProjectEstimateHour" class="wizard-form-text-label">Estimate Hour(s)</label>
+                    <label for="inputProjectEstimateHour">Estimate Hour(s)</label>
                     <input type="text" class="form-control" id="inputProjectEstimateHour" name="project_estimate_hour" placeholder="">
+                    <span class="text-danger input-error project_estimate_hour-error wizard-form-error"></span>
                 </div>
             </div>
 
             <div class="col-lg-2">
                 <div class="form-group">
+                    <label>&nbsp;</label><br/>
                     <a class="addmore" style="cursor: pointer;" onclick="add_more_role()">&nbsp;
                         Add More Role
                     </a>
@@ -303,15 +360,16 @@ class ProjectController extends Controller
         <hr/>
 
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-12">
 
-                <table width="100%">
+                <table width="100%" class="table" id="projectRolesTable">
                     <thead>
-                        <th>
-                            <td>Name</td>
-                            <td>Role</td>
-                            <td>Hours</td>
-                        </th>
+                        <tr>
+                            <th>Name</th>
+                            <th>Role</th>
+                            <th>Hours</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
 
                     <tbody>
