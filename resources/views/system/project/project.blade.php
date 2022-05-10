@@ -30,6 +30,7 @@
                         <th>Total Hour(s)</th>
                         <th>Project Manager</th>
                         <th>Project Type</th>
+                        <th>Project Status</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -37,26 +38,42 @@
                 
                 <tbody>
                     <?php $x = 0; ?>
-                    @foreach ($projects as $project)
+                    @foreach ($leader_projects as $leader_project)
                     <?php $x++;?>
-                    <tr data-row="{{ $project->project_id}}">
+                    <tr data-row="{{ $leader_project->project_id}}">
                         <td>{{ $x }}</td>
-                        <td>{{ $project->project_name }}</td>
-                        <td>{{ $project->start_date }}</td>
-                        <td>{{ $project->end_date}}</td>
-                        <td>{{ $project->total_hours}}</td>
+                        <td>
+                            <div class="project-title" style="font-weight: bold;color: #27292c;">{{ $leader_project->project_name }}</div>
+                            <div class="project-description" style="color: #fb0;">{{ $leader_project->project_description }}</div>
+
+                            <div>
+                                <ul style="color:#28a745;">
+                                <?php 
+                                $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($leader_project->project_id);
+                                foreach($project_tasks as $project_task){?>
+                                    
+                                        <li><?php echo $project_task->project_task;?></li>
+                                    
+                                <?php } ?>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>{{ $leader_project->start_date }}</td>
+                        <td>{{ $leader_project->end_date}}</td>
+                        <td>{{ $leader_project->total_hours}}</td>
                         <td>
                             <?php 
-                            $user = $UsersModel->get_user_by_user_id($project->project_manager_id);
+                            $user = $UsersModel->get_user_by_user_id($leader_project->leader_id);
                             echo $user->first_name.' '.$user->last_name;
                             ?>
                         </td>
+                        
                         <td>
-                            <?php if($project->project_type=="REST_API_MD"){ 
+                            <?php if($leader_project->project_type=="REST_API_MD"){ 
                                 echo "<span>Rest API Template - Multimedia Designer</span>";
-                            }elseif($project->project_type=="REST_API_WD"){
+                            }elseif($leader_project->project_type=="REST_API_WD"){
                                 echo "<span'>Rest API Template - Web Development</span>";
-                            }elseif($project->project_type=="EMPTY_TEMPLATE"){
+                            }elseif($leader_project->project_type=="EMPTY_TEMPLATE"){
                                 echo "<span'>Empty Template</span>";
                             }else{
                                  echo "<span'></span>";
@@ -64,15 +81,29 @@
                             ?>
                         </td>
                         <td>
-                            <?php if($project->status=="0"){ 
+
+                            <?php 
+                            
+                            if($leader_project->project_status=="NEW"){ 
+                                echo "<span class='badge badge-danger'>New</span>";
+                            }elseif($task->project_status=="OPEN"){
+                                echo "<span class='badge badge-primary'>OPEN</span>";
+                            }elseif($task->project_status=="INPROGRESS"){
+                                echo "<span class='badge badge-warning'>In Progress</span>";
+                            }elseif($task->project_status=="COMPLETED"){
+                                echo "<span class='badge badge-success'>Completed</span>";
+                            }?>
+                        </td>
+                        <td>
+                            <?php if($leader_project->status=="0"){ 
                                 echo "<span class='badge badge-success'>Active</span>";
                             }else{
                                 echo "<span class='badge badge-danger'>Deactive</span>";
                             }?>
                         </td>
                         <td>
-                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="project_edit('{{ $project->project_id}}')"></a>&nbsp;&nbsp;
-                            <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="project_delete('{{ $project->project_id}}')"></a>
+                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="project_edit('{{ $leader_project->project_id}}')"></a>&nbsp;&nbsp;
+                            <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="project_delete('{{ $leader_project->project_id}}')"></a>
 
                         </td>
                     </tr>
@@ -117,7 +148,7 @@ function project_edit(project_id){
         url: "{{URL::to('edit-project-form-ajax')}}",
         data: {"_token": "{{ csrf_token() }}",project_id:project_id},
         success :function(content){
-            load_modal('Edit Project',content.element,'60%');
+            load_modal('Edit Project',content.element,'90%');
         },
         error:function(){
             alert("Error!");

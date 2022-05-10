@@ -26,12 +26,15 @@ class ProjectController extends Controller
 
         $ProjectsModel = new ProjectsModel();//Load Model
         $UsersModel = new UsersModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $leader_id = Session::get('user')['user_id'];
 
-        $projects = $ProjectsModel->get_all_projects();// Get All Projects
+        $leader_projects = $ProjectsModel->get_all_leader_projects($leader_id);// Get All Leader Projects
         
         $data['page_title'] = 'Projects';// Define Page Title
-        $data['projects'] = $projects;// Pass Projects Data to Data Array
+        $data['leader_projects'] = $leader_projects;// Pass Projects Data to Data Array
         $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
+        $data['ProjectTasksModel'] = $ProjectTasksModel;// Pass Users Model to Data Array
 
         return view('system/project/project',$data);
         
@@ -45,6 +48,7 @@ class ProjectController extends Controller
         $project_managers = $UsersModel->get_all_active_users();
 
         $data['project_managers'] = $project_managers;
+        $data['user_id'] = Session::get('user')['user_id'];
 
         return Response::json(array('element' => View::make('system/project/add_project_form_aj',$data)->render()));
     }
@@ -66,6 +70,7 @@ class ProjectController extends Controller
         $total_hours    = $request->get('total_hours');
         $stakeholders  = $request->get('stakeholders');
         $project_leader = $request->get('project_leader');
+        $project_status = $request->get('project_status');
         $github_repository=$request->get('github_repository');
 
         // define variable with project array data
@@ -92,6 +97,7 @@ class ProjectController extends Controller
         $ProjectsModel->git_repository= $github_repository;  
         $ProjectsModel->leader_id = $project_leader;
         $ProjectsModel->project_type = $project_type;
+        $ProjectsModel->project_status = $project_status;
         $ProjectsModel->status = $status;
         $ProjectsModel->added_by = Session::get('user')['user_id'];
         $ProjectsModel->added_date = date("Y-m-d H:i:s");
@@ -181,13 +187,28 @@ class ProjectController extends Controller
 
         $UsersModel = new UsersModel;//Load Model
         $ProjectsModel = new ProjectsModel();//Load Model
+        $ProjectMembersModel = new ProjectMembersModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
 
         $project = $ProjectsModel->get_project_by_project_id($project_id);//Get Project Details By Project Id
+        $project_members = $ProjectMembersModel->get_project_members_by_project_id($project_id);//Get Project Members Details By Project Id
+        $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($project_id);//Get Project Tasks Details By Project Id
+        $api_template_items = $ApiTemplatesItemsModel->get_api_template_items_by_project_id($project_id);//Get API Template Items Details By Project Id
+
+        $api_template_items_array=[];
+        foreach($api_template_items as $api_template_item){
+            $api_template_items_array[]=$api_template_item->template_item;
+        }
 
         $project_managers = $UsersModel->get_all_active_users();//Get All Users
 
         $data['project_managers'] = $project_managers;// Pass Project Manager Data to the $Data Array
         $data['project'] = $project;// Pass Project Data to the $Data Array
+        $data['project_members'] = $project_members;// Pass Project Member Data to the $Data Array
+        $data['project_tasks'] = $project_tasks;// Pass Project Tasks Data to the $Data Array
+        $data['api_template_items_array'] = $api_template_items_array;// Pass Project Tasks Data to the $Data Array
+        $data['user_id'] = Session::get('user')['user_id'];
 
         return Response::json(array('element' => View::make('system/project/edit_project_form_aj',$data)->render()));
     }
@@ -305,8 +326,19 @@ class ProjectController extends Controller
 
         $ProjectsModel = new ProjectsModel();//Load Model
         $UsersModel = new UsersModel();//Load Model
+        $ProjectRolesModel = new ProjectRolesModel();//Load Model
+
+        $project_id = "";
 
         $member_ids= $request->get('member_ids');
+
+        if(isset($_POST['project_id'])){
+            $project_id = $_POST['project_id'];
+
+            $projects_roles =$ProjectRolesModel->get_project_roles_by_project_id($project_id);
+        }
+
+        
 
         $project_selected_members = $UsersModel->get_users_by_user_ids($member_ids);// Get All Projects
 
@@ -373,7 +405,23 @@ class ProjectController extends Controller
                     </thead>
 
                     <tbody>
-
+                        <?php if(!empty($projects_roles)){?>
+                            <?php foreach($projects_roles as $projects_role){
+                                $user =$UsersModel->get_user_by_user_id($projects_role->member_id);
+                                ?>
+                                <tr data-row="">
+                                    <td><?php echo $user->first_name.' '.$user->last_name;?>
+                                        <input type="hidden" name="selected_member_ids[]" value="{{$projects_role->member_id}}">
+                                    </td>
+                                    <td><?php echo $projects_role->project_role;?>
+                                        <input type="hidden" name="selected_roles[]" value="{{$projects_role->project_role}}">
+                                    </td>
+                                    <td><?php echo $projects_role->estimate_hours;?>
+                                        <input type="hidden" name="selected_estimate_hours[]" value="{{$projects_role->estimate_hours}}">
+                                    </td>
+                                    <td><a onclick="remove_role(this)">Remove Role</a></td></tr>
+                            <?php } ?>
+                        <?php } ?>
                     </tbody>
                 </table>
             </div>
