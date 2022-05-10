@@ -8,16 +8,12 @@
         <li class="breadcrumb-item active">{{ $page_title }}</li>
     </ol>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <a type="button" class="btn btn-success" onclick="task_add()">Add New</a>
-        </div>
-    </div>
+
     
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            My Tasks List
+            Tasks List
         </div>
         <div class="card-body">
             <table id="datatablesSimple">
@@ -26,8 +22,6 @@
                         <th>#</th>
                         <th>Task Name</th>
                         <th>Project</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -37,30 +31,27 @@
                     <?php $x = 0; ?>
                     @foreach ($tasks as $task)
                     <?php $x++;?>
-                    <tr data-row="{{ $task->task_id}}">
+                    <tr data-row="{{ $task->project_task_id}}">
                         <td>{{ $x }}</td>
-                        <td>{{ $task->task_name }}</td>
+                        <td>{{ $task->project_task }}</td>
                         <td>{{ $task->project_name }}</td>
-                        <td>{{ $task->start_date}}</td>
-                        <td>{{ $task->end_date}}</td>
                         
                         <td>
 
                             <?php 
                             
-                            if($task->status=="NEW"){ 
+                            if($task->task_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($task->status=="OPEN"){
+                            }elseif($task->task_status=="OPENED"){
                                 echo "<span class='badge badge-primary'>OPEN</span>";
-                            }elseif($task->status=="INPROGRESS"){
+                            }elseif($task->task_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
-                            }elseif($task->status=="COMPLETED"){
+                            }elseif($task->task_status=="COMPLETED"){
                                 echo "<span class='badge badge-success'>Completed</span>";
                             }?>
                         </td>
                         <td>
-                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="task_edit('{{ $task->task_id}}')"></a>&nbsp;&nbsp;
-                            <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="task_delete('{{ $task->task_id}}')"></a>
+                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="task_edit('{{ $task->project_task_id}}')"></a>&nbsp;&nbsp;
 
                         </td>
                     </tr>
@@ -83,26 +74,14 @@
 
 @push('scripting')
 <script>
-function task_add(){
-    $.ajax({
-        type:'POST',
-        url: "{{URL::to('add-task-form-ajax')}}",
-        data: {"_token": "{{ csrf_token() }}"},
-        success :function(content){
-            load_modal('Add Task',content.element,'60%');
-        },
-        error:function(){
-            alert("Error!");
-        }
-    });
-  }
 
 
-  function task_edit(task_id){
+
+  function task_edit(project_task_id){
     $.ajax({
         type:'POST',
         url: "{{URL::to('edit-task-form-ajax')}}",
-        data: {"_token": "{{ csrf_token() }}",task_id:task_id},
+        data: {"_token": "{{ csrf_token() }}",project_task_id:project_task_id},
         success :function(content){
             load_modal('Edit Task',content.element,'60%');
         },

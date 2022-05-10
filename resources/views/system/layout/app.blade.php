@@ -53,7 +53,7 @@
                                 Dashboard
                             </a>
 
-                            <?php if(Session::get('user')['isLeader']== TRUE){ ?>
+                            
                             <div class="sb-sidenav-menu-heading">Project</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMyProjects" aria-expanded="false" aria-controls="collapseMyProjects">
                                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
@@ -65,12 +65,16 @@
                                     <?php if(Session::get('user')['isLeader']== TRUE){ ?>
                                     <a class="nav-link" href="{{URL::to('manage/project')}}">Projects</a>
                                     <?php } ?>
+
+                                    <a class="nav-link" href="{{URL::to('manage/role')}}">Roles</a>
+                                    <a class="nav-link" href="{{URL::to('manage/task')}}">Tasks</a>
+                                    
                                     <!-- <a class="nav-link" href="{{URL::to('my_project/task')}}">Tasks</a> -->
                                     <!-- <a class="nav-link" href="{{URL::to('my_project/assign_user')}}">Assign User</a> -->
                                     <!-- <a class="nav-link" href="{{URL::to('manage/my_task')}}">My Tasks</a> -->
                                 </nav>
                             </div>
-                            <?php } ?>
+                            
                             
                             
                             <?php if(Session::get('user')['user_type']=="ADMIN"){ ?>

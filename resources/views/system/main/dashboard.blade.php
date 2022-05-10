@@ -68,24 +68,22 @@
                     <?php $x = 0; ?>
                     @foreach ($pending_tasks as $pending_task)
                     <?php $x++;?>
-                    <tr data-row="{{ $pending_task->task_id}}">
+                    <tr data-row="{{ $pending_task->project_task_id}}">
                         <td>{{ $x }}</td>
-                        <td>{{ $pending_task->task_name }}</td>
+                        <td>{{ $pending_task->project_task }}</td>
                         <td>{{ $pending_task->project_name }}</td>
-                        <td>{{ $pending_task->start_date}}</td>
-                        <td>{{ $pending_task->end_date}}</td>
                         
                         <td>
 
                             <?php 
                             
-                            if($pending_task->status=="NEW"){ 
+                            if($pending_task->task_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($pending_task->status=="OPEN"){
+                            }elseif($pending_task->task_status=="OPENED"){
                                 echo "<span class='badge badge-primary'>OPEN</span>";
-                            }elseif($pending_task->status=="INPROGRESS"){
+                            }elseif($pending_task->task_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
-                            }elseif($pending_task->status=="COMPLETED"){
+                            }elseif($pending_task->task_status=="COMPLETED"){
                                 echo "<span class='badge badge-success'>Completed</span>";
                             }?>
                         </td>

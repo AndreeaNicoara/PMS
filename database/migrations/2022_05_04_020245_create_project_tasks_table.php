@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('project_tasks', function (Blueprint $table) {
             $table->increments('project_task_id',11);
             $table->integer('project_id')->unsigned();
+            $table->integer('user_id')->nullable()->unsigned();
             $table->string('project_task',255);
+            $table->enum('task_status', ['NEW', 'OPENED','INPROGRESS','CLOSED'])->nullable()->default('NEW');
             $table->integer('added_by')->unsigned();
             $table->timestamp('added_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('updated_by')->nullable()->unsigned();

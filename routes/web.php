@@ -47,10 +47,13 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/update-project-process', [App\Http\Controllers\system\project\ProjectController::class, 'updateProjectProcess']);// Routes for Update Project Process
     Route::post('/delete-project-process', [App\Http\Controllers\system\project\ProjectController::class, 'deleteProjectProcess']);// Routes for Delete Project Process
     Route::post('/get-project-member-list', [App\Http\Controllers\system\project\ProjectController::class, 'getProjectMemberList']);//Routes for Project Management Page
+    Route::get('/project/assign-task/{project_task_id}', [App\Http\Controllers\system\project\ProjectController::class, 'assignTask']);//Routes for Assign Task Page
+    Route::post('/project/assign-user-form-ajax', [App\Http\Controllers\system\project\ProjectController::class, 'assignUserFormAjax']);//Routes for Assign User Form Page
+    Route::post('/project/update-task-user-process', [App\Http\Controllers\system\project\ProjectController::class, 'updateTaskUserProcess']);// Routes for Add Project Process
 
 
     //****Task Management Rotes Here****//
-    Route::get('/my_project/task', [App\Http\Controllers\system\project\MyProjectController::class, 'task']);
+    //Route::get('/my_project/task', [App\Http\Controllers\system\project\MyProjectController::class, 'task']);
     //****Assign User Management Rotes Here****//
     // Route::get('/my_project/assign_user', [App\Http\Controllers\system\project\MyProjectController::class, 'assignUser']);//Routes for Assign User Page
     // Route::get('/my_project/assign_user_view/{par1}', [App\Http\Controllers\system\project\MyProjectController::class, 'assignUserView']);
@@ -58,11 +61,9 @@ Route::group(['middleware' => 'web'], function () {
     // Route::post('/add-project-user-process', [App\Http\Controllers\system\project\MyProjectController::class, 'addProjectUserProcess']);
     // Route::post('/delete-project-user-process', [App\Http\Controllers\system\project\MyProjectController::class, 'deleteProjectUserProcess']);
 
-    Route::get('/manage/my_task', [App\Http\Controllers\system\task\MyTaskController::class, 'index']);
-    Route::post('/add-task-form-ajax', [App\Http\Controllers\system\task\MyTaskController::class, 'addTaskFormAjax']);
-    Route::post('/add-task-process', [App\Http\Controllers\system\task\MyTaskController::class, 'addTaskProcess']);
-    Route::post('/edit-task-form-ajax', [App\Http\Controllers\system\task\MyTaskController::class, 'editTaskFormAjax']);
-    Route::post('/update-task-process', [App\Http\Controllers\system\task\MyTaskController::class, 'updateTaskProcess']);
+    Route::get('/manage/task', [App\Http\Controllers\system\task\TaskController::class, 'index']);
+    Route::post('/edit-task-form-ajax', [App\Http\Controllers\system\task\TaskController::class, 'editTaskFormAjax']);
+    Route::post('/update-task-process', [App\Http\Controllers\system\task\TaskController::class, 'updateTaskProcess']);
 
     //****Leader Management Routes Here****//
     Route::get('/manage/leader', [App\Http\Controllers\system\leader\LeaderConroller::class, 'index']);//Routes for Leader Page
@@ -71,4 +72,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::post('/update-leader-form-ajax', [App\Http\Controllers\system\leader\LeaderConroller::class, 'updateLeaderFormAjax']);//Routes for Leader Update Page
     Route::post('/update-leader-process', [App\Http\Controllers\system\leader\LeaderConroller::class, 'updateLeaderProcess']);//Routes for Leader Update 
     Route::post('/delete-leader-process', [App\Http\Controllers\system\leader\LeaderConroller::class, 'deleteLeaderProcess']);
+
+    //****Role Management Rotes Here****//
+    Route::get('/manage/role', [App\Http\Controllers\system\role\RoleController::class, 'index']);//Routes for Role Management Page
+    Route::post('/view-role-form-ajax', [App\Http\Controllers\system\role\RoleController::class, 'viewRoleFormAjax']);
+    
 });

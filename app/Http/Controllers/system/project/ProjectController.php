@@ -5,7 +5,7 @@ namespace App\Http\Controllers\system\project;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-//-- Dush 2022.05.03 OPENED--//
+
 use Validator,Redirect,Response;
 use View;
 use App\Models\UsersModel;
@@ -17,7 +17,7 @@ use App\Models\ApiTemplatesItemsModel;
 use App\Models\ProjectRolesModel;
 use App\Models\ProjectTechnologiesModel;
 use Session;
-//-- Dush 2022.05.03 CLOSED--//
+
 
 class ProjectController extends Controller
 {
@@ -606,5 +606,96 @@ class ProjectController extends Controller
 
         // return view('system/project/project',$data);
         
+    }
+
+
+    public function assignTask($project_task_id){
+
+        $ProjectsModel = new ProjectsModel();//Load Model
+        $UsersModel = new UsersModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $leader_id = Session::get('user')['user_id'];
+
+        $project_task = $ProjectTasksModel->get_task_by_project_task_id($project_task_id);// Get All task by id
+        
+        $data['page_title'] = 'Task('.$project_task->project_task.')';// Define Page Title
+        $data['project_task_id'] = $project_task_id;
+        $data['project_task'] = $project_task;// Pass Users Model to Data Array
+        $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
+
+        return view('system/project/assign_task',$data);
+        
+    }
+
+    // Add Assign User Form Ajax View
+    public function assignUserFormAjax(Request $request)
+    {
+        $UsersModel = new UsersModel();
+
+        $project_task_id = $request->get('project_task_id');
+
+        $task_users = $UsersModel->get_all_active_users();
+
+        $data['task_users'] = $task_users;
+        $data['project_task_id'] = $project_task_id;
+
+        return Response::json(array('element' => View::make('system/project/add_task_user_form_aj',$data)->render()));
+    }
+
+    //Update Task User Process
+    public function updateTaskUserProcess(Request $request)
+    {
+        $UsersModel = new UsersModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $session = session();//Session Initialized
+
+        //Assign Data To Variable
+        $project_task_id= $request->get('project_task_id');
+        $user_id= $request->get('user_id');
+
+        //Input Validations
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',//Validation Rule
+        ],
+        [
+            'user_id.required' => 'User is required',//Validation Message
+        ]);
+
+        if ($validator->fails()) {// If Validation Failure
+            // Failure Response Message
+            return Response::json(array(
+                'success' => false,
+                'errors' => $validator->getMessageBag()->toArray()
+
+            ), 422);
+        }else{// If Validation Not Failure
+
+            // Update Data
+            $updated = $ProjectTasksModel::where('project_task_id', $project_task_id)->update(
+                array(
+                    'user_id'   => $user_id,
+                    'updated_by'   => Session::get('user')['user_id'],
+                    'updated_date'   => date("Y-m-d H:i:s"),
+                )
+            );
+
+            
+
+            if($updated){
+                // Success Response Message
+                $response = array(
+                    'status' => true,
+                    'message' => "User assigned successfully."
+                );
+            }else{
+                // Failure Response Message
+                $response = array(
+                    'status' => false,
+                    'message' => "Something went wrong."
+                );
+            }
+
+            echo json_encode($response);
+        }
     }
 }
