@@ -12,4 +12,11 @@ class ProjectTasksModel extends Model
     protected $table = 'project_tasks';
     protected $allowedFields = ['project_task_id ','project_id ','project_task'];
     public $timestamps = false;
+
+    function get_tasks_by_project_id($project_id){
+        return DB::table('project_tasks')->select('*')
+        ->where("project_tasks.project_id", $project_id)
+        ->get();
+
+    }
 }

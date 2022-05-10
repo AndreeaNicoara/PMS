@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('git_repository',255)->nullable();
             $table->integer('leader_id')->unsigned();
             $table->enum('project_type', ['REST_API_MD', 'REST_API_WD', 'EMPTY_TEMPLATE'])->nullable();
+            $table->enum('project_status', ['NEW', 'OPENED', 'INPROGRESS','COMPLETED'])->nullable()->default('NEW');
             $table->enum('status', ['0', '1'])->nullable()->default('0')->comment = '0 = Active & 1 = Deactive';
             $table->integer('added_by')->unsigned();
             $table->timestamp('added_date')->default(DB::raw('CURRENT_TIMESTAMP'));

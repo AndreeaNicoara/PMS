@@ -20,7 +20,7 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputProjectType" class="wizard-form-text-label">Project Type <span class="required">*</span></label>
+                                            <label for="inputProjectType">Project Type <span class="required">*</span></label>
                                             <select class="form-control wizard-required" id="inputProjectType" name="project_type">
                                                 <option value=""></option>
                                                 <option value="REST_API_MD">Rest API Template - Multimedia Designer</option>
@@ -28,6 +28,20 @@
                                                 <option value="EMPTY_TEMPLATE">Empty Template</option>
                                             </select>
                                             <span class="text-danger input-error project_type-error wizard-form-error"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="inputProjectStatus">Project Status <span class="required">*</span></label>
+                                            <select class="form-control" id="inputProjectStatus" name="project_status">
+                                                <option value="">Select Status</option>
+                                                <option value="NEW">New</option>
+                                                <option value="OPENED">Opened</option>
+                                                <option value="INPROGRESS">In Progress</option>
+                                                <option value="COMPLETED">Completed</option>
+                                            </select>
+                                            <span class="text-danger input-error status-error"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +52,7 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputProjectName" class="wizard-form-text-label">Project Name <span class="required">*</span></label>
+                                            <label for="inputProjectName">Project Name <span class="required">*</span></label>
                                             <input type="text" class="form-control wizard-required" id="inputProjectName" name="project_name">
                                             <span class="text-danger input-error project_name-error wizard-form-error"></span>
                                         </div>
@@ -46,7 +60,7 @@
 
                                     <div class="col-lg-2">
                                         <div class="form-group">
-                                            <label for="inputProjectCode" class="wizard-form-text-label">Project Code <span class="required">*</span></label>
+                                            <label for="inputProjectCode">Project Code <span class="required">*</span></label>
                                             <input type="text" class="form-control wizard-required" id="inputProjectCode" name="project_code">
                                             <span class="text-danger input-error project_code-error wizard-form-error"></span>
                                         </div>
@@ -54,7 +68,7 @@
 
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label for="inputProjectDescription" class="wizard-form-text-label">Project Description </label>
+                                            <label for="inputProjectDescription">Project Description </label>
                                             <textarea class="form-control" id="inputProjectDescription" name="project_description" maxlength="200"></textarea>
                                             <span class="text-danger input-error project_description-error"></span>
                                         </div>
@@ -67,7 +81,7 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputStartDate" class="wizard-form-text-label">Start Date <span class="required">*</span></label>
+                                            <label for="inputStartDate">Start Date <span class="required">*</span></label>
                                             <input type="date" class="form-control wizard-required" id="inputStartDate" name="start_date" placeholder="">
                                             <span class="text-danger input-error start_date-error wizard-form-error"></span>
                                         </div>
@@ -75,7 +89,7 @@
 
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputEndDate" class="wizard-form-text-label">End Date <span class="required">*</span></label>
+                                            <label for="inputEndDate">End Date <span class="required">*</span></label>
                                             <input type="date" class="form-control wizard-required" id="inputEndDate" name="end_date" placeholder="">
                                             <span class="text-danger input-error end_date-error wizard-form-error"></span>
                                         </div>
@@ -83,7 +97,7 @@
 
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputTotalHours" class="wizard-form-text-label">Total Hour(s) <span class="required">*</span></label>
+                                            <label for="inputTotalHours">Total Hour(s) <span class="required">*</span></label>
                                             <input type="text" class="form-control wizard-required" id="inputTotalHours" name="total_hours">
                                             <span class="text-danger input-error total_hours-error wizard-form-error"></span>
                                         </div>
@@ -96,7 +110,7 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputStakeholders" class="wizard-form-text-label">Stakeholder/Partners </label>
+                                            <label for="inputStakeholders">Stakeholder/Partners </label>
                                             <input type="text" class="form-control" id="inputStakeholders" name="stakeholders" placeholder="">
                                             <span class="text-danger input-error stakeholders-error"></span>
                                         </div>
@@ -113,11 +127,13 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label for="inputProjectLeader" class="wizard-form-text-label">Project Leader <span class="required">*</span></label>
+                                            <label for="inputProjectLeader">Project Leader <span class="required">*</span></label>
                                             <select class="form-control wizard-required" id="inputProjectLeader" name="project_leader" placeholder="">
                                                 <option value=""></option>
                                                 <?php foreach ($project_managers as $key => $project_manager) { ?>
+                                                    <?php if($project_manager->user_id==$user_id){?>
                                                     <option value="<?php echo $project_manager->user_id;?>"><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
+                                                    <?php } ?>
                                                 <?php } ?>
                                             </select>
                                             <span class="text-danger input-error project_leader-error wizard-form-error"></span>
@@ -286,6 +302,15 @@
                                             <!-- <a href="javascript:;" class="form-wizard-submit float-right">Submit</a> -->
                                             <button type="submit" class="form-wizard-submit float-right"id="formAddProjectSubmit">Submit</button>
 
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="message-box" style="text-align:center;">
+                                            
                                         </div>
                                     </div>
                                 </div>
