@@ -86,11 +86,11 @@
                             
                             if($leader_project->project_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($task->project_status=="OPEN"){
+                            }elseif($leader_project->project_status=="OPEN"){
                                 echo "<span class='badge badge-primary'>OPEN</span>";
-                            }elseif($task->project_status=="INPROGRESS"){
+                            }elseif($leader_project->project_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
-                            }elseif($task->project_status=="COMPLETED"){
+                            }elseif($leader_project->project_status=="COMPLETED"){
                                 echo "<span class='badge badge-success'>Completed</span>";
                             }?>
                         </td>

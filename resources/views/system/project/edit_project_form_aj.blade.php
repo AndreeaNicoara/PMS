@@ -39,7 +39,7 @@
                                             <select class="form-control" id="inputProjectStatus" name="project_status">
                                                 <option value="">Select Status</option>
                                                 <option value="NEW" <?php if($project->project_status=="NEW"){echo "selected";}?>>New</option>
-                                                <option value="OPEN" <?php if($project->project_status=="OPEN"){echo "selected";}?>>Open</option>
+                                                <option value="OPENED" <?php if($project->project_status=="OPENED"){echo "selected";}?>>Opened</option>
                                                 <option value="INPROGRESS" <?php if($project->project_status=="INPROGRESS"){echo "selected";}?>>In Progress</option>
                                                 <option value="COMPLETED" <?php if($project->project_status=="COMPLETED"){echo "selected";}?>>Completed</option>
                                             </select>
@@ -326,7 +326,12 @@
                                             </thead>
 
                                             <tbody>
-                                                
+                                                <?php foreach($project_technologies as $project_technology){ ?>
+                                                <tr>
+                                                    <td><?php echo $project_technology->technology_name;?>
+                                                        <input type="hidden" name="project_technologies[]" value="<?php echo $project_technology->technology_name;?>"></td>
+                                                        <td><a onclick="remove_technology(this)">Remove Technology</a></td></tr>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
                                     </div>
@@ -339,6 +344,14 @@
                                             <!-- <a href="javascript:;" class="form-wizard-submit float-right">Submit</a> -->
                                             <button type="submit" class="form-wizard-submit float-right"id="formAddProjectSubmit">Submit</button>
 
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="message-box" style="text-align:center;">
+                                            
                                         </div>
                                     </div>
                                 </div>

@@ -37,7 +37,7 @@
                                             <select class="form-control" id="inputProjectStatus" name="project_status">
                                                 <option value="">Select Status</option>
                                                 <option value="NEW">New</option>
-                                                <option value="OPEN">Open</option>
+                                                <option value="OPENED">Opened</option>
                                                 <option value="INPROGRESS">In Progress</option>
                                                 <option value="COMPLETED">Completed</option>
                                             </select>
@@ -302,6 +302,15 @@
                                             <!-- <a href="javascript:;" class="form-wizard-submit float-right">Submit</a> -->
                                             <button type="submit" class="form-wizard-submit float-right"id="formAddProjectSubmit">Submit</button>
 
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="message-box" style="text-align:center;">
+                                            
                                         </div>
                                     </div>
                                 </div>
