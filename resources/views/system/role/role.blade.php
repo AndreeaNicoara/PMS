@@ -59,7 +59,7 @@
                         <td>{{ $role_project->total_hours}}</td>
                         <td>
                             <?php 
-                            $user = $UsersModel->get_user_by_user_id($role_project->leader_id);
+                            $user = $UsersModel->get_user_by_user_id($role_project->user_id);
                             echo $user->first_name.' '.$user->last_name;
                             ?>
                         </td>

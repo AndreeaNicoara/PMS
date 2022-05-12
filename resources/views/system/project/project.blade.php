@@ -38,18 +38,18 @@
                 
                 <tbody>
                     <?php $x = 0; ?>
-                    @foreach ($leader_projects as $leader_project)
+                    @foreach ($user_projects as $user_project)
                     <?php $x++;?>
-                    <tr data-row="{{ $leader_project->project_id}}">
+                    <tr data-row="{{ $user_project->project_id}}">
                         <td>{{ $x }}</td>
                         <td>
-                            <div class="project-title" style="font-weight: bold;color: #27292c;">{{ $leader_project->project_name }}</div>
-                            <div class="project-description" style="color: #fb0;">{{ $leader_project->project_description }}</div>
+                            <div class="project-title" style="font-weight: bold;color: #27292c;">{{ $user_project->project_name }}</div>
+                            <div class="project-description" style="color: #fb0;">{{ $user_project->project_description }}</div>
 
                             <div>
                                 <ul style="color:#28a745;">
                                 <?php 
-                                $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($leader_project->project_id);
+                                $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($user_project->project_id);
                                 foreach($project_tasks as $project_task){?>
                                     
                                         <li><a href="{{URL::to('project/assign-task/'.$project_task->project_task_id)}}"><?php echo $project_task->project_task;?></li>
@@ -58,22 +58,22 @@
                                 </ul>
                             </div>
                         </td>
-                        <td>{{ $leader_project->start_date }}</td>
-                        <td>{{ $leader_project->end_date}}</td>
-                        <td>{{ $leader_project->total_hours}}</td>
+                        <td>{{ $user_project->start_date }}</td>
+                        <td>{{ $user_project->end_date}}</td>
+                        <td>{{ $user_project->total_hours}}</td>
                         <td>
                             <?php 
-                            $user = $UsersModel->get_user_by_user_id($leader_project->leader_id);
+                            $user = $UsersModel->get_user_by_user_id($user_project->user_id);
                             echo $user->first_name.' '.$user->last_name;
                             ?>
                         </td>
                         
                         <td>
-                            <?php if($leader_project->project_type=="REST_API_MD"){ 
+                            <?php if($user_project->project_type=="REST_API_MD"){ 
                                 echo "<span>Rest API Template - Multimedia Designer</span>";
-                            }elseif($leader_project->project_type=="REST_API_WD"){
+                            }elseif($user_project->project_type=="REST_API_WD"){
                                 echo "<span'>Rest API Template - Web Development</span>";
-                            }elseif($leader_project->project_type=="EMPTY_TEMPLATE"){
+                            }elseif($user_project->project_type=="EMPTY_TEMPLATE"){
                                 echo "<span'>Empty Template</span>";
                             }else{
                                  echo "<span'></span>";
@@ -84,22 +84,22 @@
 
                             <?php 
                             
-                            if($leader_project->project_status=="NEW"){ 
+                            if($user_project->project_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($leader_project->project_status=="OPEN"){
+                            }elseif($user_project->project_status=="OPEN"){
                                 echo "<span class='badge badge-primary'>OPEN</span>";
-                            }elseif($leader_project->project_status=="INPROGRESS"){
+                            }elseif($user_project->project_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
-                            }elseif($leader_project->project_status=="COMPLETED"){
+                            }elseif($user_project->project_status=="COMPLETED"){
                                 echo "<span class='badge badge-success'>Completed</span>";
                             }?>
 
-                            <?php if($leader_project->end_date < date("Y-m-d")){?>
+                            <?php if($user_project->end_date < date("Y-m-d")){?>
                             <span class="blink" style="color:red;text-transform: uppercase;font-weight: bold;">Overdue! </span>
                             <?php } ?>
                         </td>
                         <td>
-                            <?php if($leader_project->status=="0"){ 
+                            <?php if($user_project->status=="0"){ 
                                 echo "<span class='badge badge-success'>Active</span>";
                             }else{
                                 echo "<span class='badge badge-danger'>Deactive</span>";
@@ -107,8 +107,8 @@
                         </td>
                         <td>
                            <!--  <a ><img src="{{ asset('system/images/png/task.png') }}" width="25px"></a>&nbsp;&nbsp; -->
-                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="project_edit('{{ $leader_project->project_id}}')"></a>&nbsp;&nbsp;
-                            <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="project_delete('{{ $leader_project->project_id}}')"></a>
+                            <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="project_edit('{{ $user_project->project_id}}')"></a>&nbsp;&nbsp;
+                            <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="project_delete('{{ $user_project->project_id}}')"></a>
 
                         </td>
                     </tr>

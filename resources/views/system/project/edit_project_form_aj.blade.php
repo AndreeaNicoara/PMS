@@ -126,27 +126,7 @@
 
                                 <h5>Members</h5>
                                 <hr/>
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="inputProjectLeader">Project Leader <span class="required">*</span></label>
-                                             
-                                            <select class="form-control wizard-required" id="inputProjectLeader" name="project_leader" placeholder="">
-                                                <option value=""></option>
-                                                <?php foreach ($project_managers as $key => $project_manager) { ?>
-                                                    <?php if($project_manager->user_id==$user_id){?>
-                                                    <option value="<?php echo $project_manager->user_id;?>" <?php if($project_manager->user_id == $project->leader_id){ echo "selected";}?>><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </select>
-                                            <span class="text-danger input-error project_leader-error wizard-form-error"></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4"></div>
-
-                                    <div class="col-lg-4"></div>
-                                </div>
+                                
 
 
                                 <div class="row" >

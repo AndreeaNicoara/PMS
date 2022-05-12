@@ -72,7 +72,8 @@
                         <td>{{ $x }}</td>
                         <td>{{ $pending_task->project_task }}</td>
                         <td>{{ $pending_task->project_name }}</td>
-                        
+                        <td>{{ $pending_task->start_date }}</td>
+                        <td>{{ $pending_task->end_date }}</td>
                         <td>
 
                             <?php 
@@ -86,7 +87,7 @@
                             }elseif($pending_task->task_status=="COMPLETED"){
                                 echo "<span class='badge badge-success'>Completed</span>";
                             }?>
-                        </td>
+                        
                         
                     </tr>
                     @endforeach

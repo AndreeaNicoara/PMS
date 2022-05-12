@@ -62,9 +62,9 @@
                             </a>
                             <div class="collapse" id="collapseMyProjects" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <?php if(Session::get('user')['isLeader']== TRUE){ ?>
-                                    <a class="nav-link" href="{{URL::to('manage/project')}}">Projects</a>
-                                    <?php } ?>
+                                    
+                                    
+                                    
 
                                     <a class="nav-link" href="{{URL::to('manage/role')}}">Roles</a>
                                     <a class="nav-link" href="{{URL::to('manage/task')}}">Tasks</a>
@@ -83,10 +83,11 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
                                 Users
                             </a>
-                            <a class="nav-link" href="{{URL::to('manage/leader')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-user-clock"></i></div>
-                                Leader
+                            <a class="nav-link" href="{{URL::to('manage/project')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tasks"></i></div>
+                                Projects
                             </a>
+                            
                             
                             <?php } ?>
                         </div>

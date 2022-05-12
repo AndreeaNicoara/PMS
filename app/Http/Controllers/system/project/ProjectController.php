@@ -27,12 +27,12 @@ class ProjectController extends Controller
         $ProjectsModel = new ProjectsModel();//Load Model
         $UsersModel = new UsersModel();//Load Model
         $ProjectTasksModel = new ProjectTasksModel();//Load Model
-        $leader_id = Session::get('user')['user_id'];
+        $user_id = Session::get('user')['user_id'];
 
-        $leader_projects = $ProjectsModel->get_all_leader_projects($leader_id);// Get All Leader Projects
+        $user_projects = $ProjectsModel->get_all_user_projects($user_id);// Get All Leader Projects
         
         $data['page_title'] = 'Projects';// Define Page Title
-        $data['leader_projects'] = $leader_projects;// Pass Projects Data to Data Array
+        $data['user_projects'] = $user_projects;// Pass Projects Data to Data Array
         $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
         $data['ProjectTasksModel'] = $ProjectTasksModel;// Pass Users Model to Data Array
 
@@ -69,7 +69,6 @@ class ProjectController extends Controller
         $end_date   = $request->get('end_date');
         $total_hours    = $request->get('total_hours');
         $stakeholders  = $request->get('stakeholders');
-        $project_leader = $request->get('project_leader');
         $project_status = $request->get('project_status');
         $github_repository=$request->get('github_repository');
 
@@ -94,11 +93,11 @@ class ProjectController extends Controller
         $ProjectsModel->end_date = $end_date;
         $ProjectsModel->total_hours = $total_hours;
         $ProjectsModel->stakeholder = $stakeholders;
-        $ProjectsModel->git_repository= $github_repository;  
-        $ProjectsModel->leader_id = $project_leader;
+        $ProjectsModel->git_repository= $github_repository; 
         $ProjectsModel->project_type = $project_type;
         $ProjectsModel->project_status = $project_status;
-        $ProjectsModel->status = $status;
+        $ProjectsModel->status = $status; 
+        $ProjectsModel->user_id = Session::get('user')['user_id'];
         $ProjectsModel->added_by = Session::get('user')['user_id'];
         $ProjectsModel->added_date = date("Y-m-d H:i:s");
 
@@ -232,7 +231,6 @@ class ProjectController extends Controller
         $end_date   = $request->get('end_date');
         $total_hours    = $request->get('total_hours');
         $stakeholders  = $request->get('stakeholders');
-        $project_leader = $request->get('project_leader');
         $project_status = $request->get('project_status');
         $github_repository=$request->get('github_repository');
 
@@ -259,10 +257,10 @@ class ProjectController extends Controller
                 'total_hours'   => $total_hours,
                 'stakeholder'   => $stakeholders,
                 'git_repository'   => $github_repository,
-                'leader_id'   => $project_leader,
                 'project_type'   => $project_type,
                 'project_status'   => $project_status,
                 'status'   => $status,
+                'user_id'   => Session::get('user')['user_id'],
                 'updated_by'   => Session::get('user')['user_id'],
                 'updated_date'   => date("Y-m-d H:i:s"),
             )

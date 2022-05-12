@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator,Redirect,Response;
 use App\Models\UsersModel;
-use App\Models\LeadersModel;
 use Session;
 use View;
 
@@ -21,7 +20,6 @@ class AuthController extends Controller
     public function loginAuthentication(Request $request){
 
         $UsersModel = new UsersModel();
-        $LeadersModel = new LeadersModel();
         $session = session();
 
         $username= $request->get('username');//Create Variables
@@ -62,14 +60,7 @@ class AuthController extends Controller
 
             if(!empty($userDetails) && isset($userDetails->user_id)){
 
-                //check leader
-                $leader_count = $LeadersModel->get_leader_count_by_user_id($userDetails->user_id);
                 
-                if($leader_count>0){
-                    $leader_status = TRUE;
-                }else{
-                    $leader_status = FALSE;
-                }
 
                 // Add User Data to the Session    
                 $session->put('user', [
@@ -77,7 +68,6 @@ class AuthController extends Controller
                     'first_name' => $userDetails->first_name, 
                     'last_name' => $userDetails->last_name, 
                     'user_type' => $userDetails->user_type, 
-                    'isLeader' => $leader_status,
                     'isLoggedIn' => TRUE
                 ]);
                 // Success Response Message

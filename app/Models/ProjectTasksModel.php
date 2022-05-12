@@ -74,7 +74,7 @@ class ProjectTasksModel extends Model
 
 
     function get_all_pending_task_by_user_id($user_id){
-        return DB::table('project_tasks')->select('project_tasks.*','projects.project_name')
+        return DB::table('project_tasks')->select('project_tasks.*','projects.project_name','projects.start_date','projects.end_date')
         ->leftJoin('projects', 'projects.project_id', '=', 'project_tasks.project_id')
         ->where('project_tasks.user_id', $user_id)
         ->where('project_tasks.task_status','!=','COMPLETED')

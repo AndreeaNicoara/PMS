@@ -25,9 +25,9 @@ class ProjectsModel extends Model
 
     }
 
-    function get_all_leader_projects($leader_id){
+    function get_all_user_projects($user_id){
         return DB::table('projects')->select('*')
-        ->where("projects.leader_id", $leader_id)
+        ->where("projects.user_id", $user_id)
         ->where("projects.status", "0")
         ->orderBy("projects.project_id", "desc")
         ->get();
