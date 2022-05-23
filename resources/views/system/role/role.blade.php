@@ -82,8 +82,8 @@
                             
                             if($role_project->project_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($role_project->project_status=="OPEN"){
-                                echo "<span class='badge badge-primary'>OPEN</span>";
+                            }elseif($role_project->project_status=="Open"){
+                                echo "<span class='badge badge-primary'>Open</span>";
                             }elseif($role_project->project_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
                             }elseif($role_project->project_status=="COMPLETED"){
@@ -97,7 +97,7 @@
                             <?php if($role_project->status=="0"){ 
                                 echo "<span class='badge badge-success'>Active</span>";
                             }else{
-                                echo "<span class='badge badge-danger'>Deactive</span>";
+                                echo "<span class='badge badge-danger'>Inactive</span>";
                             }?>
                         </td>
                         <td>
@@ -124,7 +124,7 @@
 
 @push('scripting')
 <script>
-//Load Project Role View With Model
+//Load "project role" view with model
 function role_view(project_id){
     $.ajax({
         type:'POST',

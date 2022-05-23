@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('confirmation_code',255);
             $table->enum('user_type', ['USER', 'ADMIN'])->nullable()->default('USER');
             $table->rememberToken();
-            $table->enum('status', ['0', '1'])->nullable()->default('0')->comment = '0 = Active & 1 = Deactive';
+            $table->enum('status', ['0', '1'])->nullable()->default('0')->comment = '0 = Active & 1 = Inactive';
             $table->integer('added_by')->unsigned();
             $table->timestamp('added_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('updated_by')->nullable()->unsigned();

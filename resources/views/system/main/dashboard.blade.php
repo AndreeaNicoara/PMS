@@ -81,7 +81,7 @@
                             if($pending_task->task_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
                             }elseif($pending_task->task_status=="OPENED"){
-                                echo "<span class='badge badge-primary'>OPEN</span>";
+                                echo "<span class='badge badge-primary'>Open</span>";
                             }elseif($pending_task->task_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
                             }elseif($pending_task->task_status=="COMPLETED"){

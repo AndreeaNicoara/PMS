@@ -86,8 +86,8 @@
                             
                             if($user_project->project_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($user_project->project_status=="OPEN"){
-                                echo "<span class='badge badge-primary'>OPEN</span>";
+                            }elseif($user_project->project_status=="Open"){
+                                echo "<span class='badge badge-primary'>Open</span>";
                             }elseif($user_project->project_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
                             }elseif($user_project->project_status=="COMPLETED"){
@@ -102,11 +102,10 @@
                             <?php if($user_project->status=="0"){ 
                                 echo "<span class='badge badge-success'>Active</span>";
                             }else{
-                                echo "<span class='badge badge-danger'>Deactive</span>";
+                                echo "<span class='badge badge-danger'>Inactive</span>";
                             }?>
                         </td>
                         <td>
-                           <!--  <a ><img src="{{ asset('system/images/png/task.png') }}" width="25px"></a>&nbsp;&nbsp; -->
                             <a><img src="{{ asset('system/images/png/edit.png') }}" width="25px" onclick="project_edit('{{ $user_project->project_id}}')"></a>&nbsp;&nbsp;
                             <a><img src="{{ asset('system/images/png/delete.png') }}" width="25px" onclick="project_delete('{{ $user_project->project_id}}')"></a>
 
@@ -131,7 +130,7 @@
 
 @push('scripting')
 <script>
-//Load Project Add View With Model
+//Load "add project" view with model
 function project_add(){
     $.ajax({
         type:'POST',
@@ -146,7 +145,7 @@ function project_add(){
     });
 }
 
-//Load Project Edit View With Model
+//Load "edit project" view with model
 function project_edit(project_id){
     $.ajax({
         type:'POST',
@@ -161,9 +160,9 @@ function project_edit(project_id){
     });
 }
 
-//Delete Project With Ajax
+//Delete project with ajax
 function project_delete(project_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-project-process')}}",

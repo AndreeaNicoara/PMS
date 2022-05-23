@@ -21,26 +21,26 @@ use Session;
 
 class ProjectController extends Controller
 {
-    // Project Management
+    //Project Management
     public function index(Request $request){
 
-        $ProjectsModel = new ProjectsModel();//Load Model
-        $UsersModel = new UsersModel();//Load Model
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ProjectsModel = new ProjectsModel();//Load model
+        $UsersModel = new UsersModel();//Load model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
         $user_id = Session::get('user')['user_id'];
 
-        $user_projects = $ProjectsModel->get_all_user_projects($user_id);// Get All Leader Projects
+        $user_projects = $ProjectsModel->get_all_user_projects($user_id);//Get all leader projects
         
-        $data['page_title'] = 'Projects';// Define Page Title
-        $data['user_projects'] = $user_projects;// Pass Projects Data to Data Array
-        $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
-        $data['ProjectTasksModel'] = $ProjectTasksModel;// Pass Users Model to Data Array
+        $data['page_title'] = 'Projects';//Define page title
+        $data['user_projects'] = $user_projects;//Pass projects data to data array
+        $data['UsersModel'] = $UsersModel;//Pass users model to data array
+        $data['ProjectTasksModel'] = $ProjectTasksModel;//Pass users model to data array
 
         return view('system/project/project',$data);
         
     }
 
-    // Add Project Ajax View
+    //Add project ajax view
     public function addProjectFormAjax(Request $request)
     {
         $UsersModel = new UsersModel();
@@ -53,14 +53,14 @@ class ProjectController extends Controller
         return Response::json(array('element' => View::make('system/project/add_project_form_aj',$data)->render()));
     }
 
-    //Add Project Process
+    //Add project process
     public function addProjectProcess(Request $request)
     {
-        $ProjectsModel = new ProjectsModel();//Load Model
+        $ProjectsModel = new ProjectsModel();//Load model
         
-        $session = session();//Session Initialized
+        $session = session();//Session initialized
 
-        // define variable with project data
+        //Define variable with project data
         $project_type   = $request->get('project_type');
         $project_name   = $request->get('project_name');
         $project_code   = $request->get('project_code');
@@ -72,9 +72,10 @@ class ProjectController extends Controller
         $project_status = $request->get('project_status');
         $github_repository=$request->get('github_repository');
 
-        // define variable with project array data
+        //Define variable with project array data
         $project_members= $request->get('project_members');
         $project_tasks= $request->get('project_tasks');
+        $project_task_users= $request->get('project_task_users');
         $api_templates=$request->get('api_templates');
 
         $selected_member_ids = $request->get('selected_member_ids');
@@ -85,7 +86,7 @@ class ProjectController extends Controller
        
         $status= "0";
 
-        // Insert Project Table
+        //Insert project table
         $ProjectsModel->project_code = $project_code;
         $ProjectsModel->project_name = $project_name;
         $ProjectsModel->project_description = $project_description;
@@ -102,12 +103,12 @@ class ProjectController extends Controller
         $ProjectsModel->added_date = date("Y-m-d H:i:s");
 
         $project_added=$ProjectsModel->save();
-        $project_id = $ProjectsModel->id;//get last inserted id
+        $project_id = $ProjectsModel->id;//Get last inserted id
 
-        // Insert Project Member Table
+        //Insert project member table
         foreach($project_members as $pm_key => $project_member){
             if($project_member!=""){
-                $ProjectMembersModel = new ProjectMembersModel();//Load Model
+                $ProjectMembersModel = new ProjectMembersModel();//Load model
                 $ProjectMembersModel->project_id = $project_id;
                 $ProjectMembersModel->member_id = $project_member;
                 $project_members_added=$ProjectMembersModel->save();
@@ -115,12 +116,13 @@ class ProjectController extends Controller
             }
             
         }
-        // Insert Project Tasks Table
+        //Insert project tasks table
         foreach($project_tasks as $pt_key => $project_task){
             if($project_task!=""){
-                $ProjectTasksModel = new ProjectTasksModel();//Load Model
+                $ProjectTasksModel = new ProjectTasksModel();//Load model
                 $ProjectTasksModel->project_id = $project_id;
                 $ProjectTasksModel->project_task = $project_task;
+                $ProjectTasksModel->user_id = $project_task_users[$pt_key];
                 $ProjectTasksModel->added_by = Session::get('user')['user_id'];
                 $ProjectTasksModel->added_date = date("Y-m-d H:i:s");
                 $project_tasks_added=$ProjectTasksModel->save();
@@ -128,10 +130,10 @@ class ProjectController extends Controller
             }
             
         }
-        // Insert API Templates Items Table
+        //Insert API templates items table
         foreach($api_templates as $ati_key => $api_template){
             if($api_template!=""){
-                $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
+                $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load model
                 $ApiTemplatesItemsModel->project_id = $project_id;
                 $ApiTemplatesItemsModel->template_item = $api_template;
                 $ApiTemplatesItemsModel->added_by = Session::get('user')['user_id'];
@@ -142,10 +144,10 @@ class ProjectController extends Controller
             
         }
 
-        // Insert Project Roles Table
+        //Insert project roles table
         foreach($selected_member_ids as $pr_key => $selected_member_id){
             if($selected_member_id!=""){
-                $ProjectRolesModel = new ProjectRolesModel();//Load Model
+                $ProjectRolesModel = new ProjectRolesModel();//Load model
                 $ProjectRolesModel->project_id = $project_id;
                 $ProjectRolesModel->member_id = $selected_member_id;
                 $ProjectRolesModel->project_role = $selected_roles[$pr_key];
@@ -157,10 +159,10 @@ class ProjectController extends Controller
         }
 
 
-        // Insert Project Technologies Table
+        //Insert project technologies table
         foreach($project_technologies as $pr_key => $project_technology){
             if($project_technology!=""){
-                $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+                $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load model
                 $ProjectTechnologiesModel->project_id = $project_id;
                 $ProjectTechnologiesModel->technology_name = $project_technology;
                 $ProjectTechnologiesModel->added_by = Session::get('user')['user_id'];
@@ -179,49 +181,49 @@ class ProjectController extends Controller
         echo json_encode($response);
     }
 
-    // Edit Project Ajax Page
+    //Edit project ajax page
     public function editProjectFormAjax(Request $request)
     {
-        $project_id = $request->get('project_id');// Assign Project Id to Variable
+        $project_id = $request->get('project_id');//Assign project ID to variable
 
-        $UsersModel = new UsersModel;//Load Model
-        $ProjectsModel = new ProjectsModel();//Load Model
-        $ProjectMembersModel = new ProjectMembersModel();//Load Model
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
-        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
-        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+        $UsersModel = new UsersModel;//Load model
+        $ProjectsModel = new ProjectsModel();//Load model
+        $ProjectMembersModel = new ProjectMembersModel();//Load model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
+        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load model
+        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load model
 
-        $project = $ProjectsModel->get_project_by_project_id($project_id);//Get Project Details By Project Id
-        $project_members = $ProjectMembersModel->get_project_members_by_project_id($project_id);//Get Project Members Details By Project Id
-        $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($project_id);//Get Project Tasks Details By Project Id
-        $api_template_items = $ApiTemplatesItemsModel->get_api_template_items_by_project_id($project_id);//Get API Template Items Details By Project Id
-        $project_technologies = $ProjectTechnologiesModel->get_project_technologies_by_project_id($project_id);//Get Project Technologies Details By Project Id
+        $project = $ProjectsModel->get_project_by_project_id($project_id);//Get project details by project ID
+        $project_members = $ProjectMembersModel->get_project_members_by_project_id($project_id);//Get project members details by project ID
+        $project_tasks = $ProjectTasksModel->get_tasks_by_project_id($project_id);//Get project tasks details by project ID
+        $api_template_items = $ApiTemplatesItemsModel->get_api_template_items_by_project_id($project_id);//Get API template items details by project ID
+        $project_technologies = $ProjectTechnologiesModel->get_project_technologies_by_project_id($project_id);//Get project technologies details by project ID
 
         $api_template_items_array=[];
         foreach($api_template_items as $api_template_item){
             $api_template_items_array[]=$api_template_item->template_item;
         }
 
-        $project_managers = $UsersModel->get_all_active_users();//Get All Users
+        $project_managers = $UsersModel->get_all_active_users();//Get all users
 
-        $data['project_managers'] = $project_managers;// Pass Project Manager Data to the $Data Array
-        $data['project'] = $project;// Pass Project Data to the $Data Array
-        $data['project_members'] = $project_members;// Pass Project Member Data to the $Data Array
-        $data['project_tasks'] = $project_tasks;// Pass Project Tasks Data to the $Data Array
-        $data['api_template_items_array'] = $api_template_items_array;// Pass Project Tasks Data to the $Data Array
-        $data['project_technologies'] = $project_technologies;// Pass Project Technologies Data to the $Data Array
+        $data['project_managers'] = $project_managers;//Pass project manager data to the $data array
+        $data['project'] = $project;//Pass project data to the $data array
+        $data['project_members'] = $project_members;//Pass project member data to the $data array
+        $data['project_tasks'] = $project_tasks;//Pass project tasks data to the $data array
+        $data['api_template_items_array'] = $api_template_items_array;//Pass API template item details to the $data array
+        $data['project_technologies'] = $project_technologies;//Pass project technologies data to the $data array
         $data['user_id'] = Session::get('user')['user_id'];
 
         return Response::json(array('element' => View::make('system/project/edit_project_form_aj',$data)->render()));
     }
 
-    // Edit User Process
+    //Edit user process
     public function updateProjectProcess(Request $request)
     {
-        $ProjectsModel = new ProjectsModel();//Load Model
-        $session = session();//Session Initialized
+        $ProjectsModel = new ProjectsModel();//Load model
+        $session = session();//Session initialized
 
-        // define variable with project data
+        //define variable with project data
         $project_id   = $request->get('project_id');
         $project_type   = $request->get('project_type');
         $project_name   = $request->get('project_name');
@@ -234,9 +236,10 @@ class ProjectController extends Controller
         $project_status = $request->get('project_status');
         $github_repository=$request->get('github_repository');
 
-        // define variable with project array data
+        //define variable with project array data
         $project_members= $request->get('project_members');
         $project_tasks= $request->get('project_tasks');
+        $project_task_users= $request->get('project_task_users');
         $api_templates=$request->get('api_templates');
 
         $selected_member_ids = $request->get('selected_member_ids');
@@ -265,28 +268,28 @@ class ProjectController extends Controller
                 'updated_date'   => date("Y-m-d H:i:s"),
             )
         );
-        //clear all tables
+        //Clear all tables
 
         $ProjectMembersModel = new ProjectMembersModel();
         $project_member_deleted = $ProjectMembersModel::where('project_id', $project_id)->delete();
 
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
         $project_task_deleted = $ProjectTasksModel::where('project_id', $project_id)->delete();
 
-        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
+        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load model
         $project_api_templates_deleted = $ApiTemplatesItemsModel::where('project_id', $project_id)->delete();
 
-        $ProjectRolesModel = new ProjectRolesModel();//Load Model
+        $ProjectRolesModel = new ProjectRolesModel();//Load model
         $project_role_deleted = $ProjectRolesModel::where('project_id', $project_id)->delete();
 
-        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load model
         $project_technology_deleted = $ProjectTechnologiesModel::where('project_id', $project_id)->delete();
 
-        // Insert Project Member Table
+        //Insert project member table
         if(isset($project_members)){
             foreach($project_members as $pm_key => $project_member){
                 if($project_member!=""){
-                    $ProjectMembersModel = new ProjectMembersModel();//Load Model
+                    $ProjectMembersModel = new ProjectMembersModel();//Load model
                     $ProjectMembersModel->project_id = $project_id;
                     $ProjectMembersModel->member_id = $project_member;
                     $project_members_added=$ProjectMembersModel->save();
@@ -296,13 +299,14 @@ class ProjectController extends Controller
             }
         }
 
-        // Insert Project Tasks Table
+        //Insert project tasks table
         if(isset($project_tasks)){
             foreach($project_tasks as $pt_key => $project_task){
                 if($project_task!=""){
-                    $ProjectTasksModel = new ProjectTasksModel();//Load Model
+                    $ProjectTasksModel = new ProjectTasksModel();//Load model
                     $ProjectTasksModel->project_id = $project_id;
                     $ProjectTasksModel->project_task = $project_task;
+                    $ProjectTasksModel->user_id = $project_task_users[$pt_key];
                     $ProjectTasksModel->added_by = Session::get('user')['user_id'];
                     $ProjectTasksModel->added_date = date("Y-m-d H:i:s");
                     $project_tasks_added=$ProjectTasksModel->save();
@@ -312,11 +316,11 @@ class ProjectController extends Controller
             }
         }
 
-        // Insert API Templates Items Table
+        //Insert API templates items table
         if(isset($api_templates)){
             foreach($api_templates as $ati_key => $api_template){
                 if($api_template!=""){
-                    $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
+                    $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load model
                     $ApiTemplatesItemsModel->project_id = $project_id;
                     $ApiTemplatesItemsModel->template_item = $api_template;
                     $ApiTemplatesItemsModel->added_by = Session::get('user')['user_id'];
@@ -328,11 +332,11 @@ class ProjectController extends Controller
             }
         }
 
-        // Insert Project Roles Table
+        //Insert project roles table
         if(isset($selected_member_ids)){
             foreach($selected_member_ids as $pr_key => $selected_member_id){
                 if($selected_member_id!=""){
-                    $ProjectRolesModel = new ProjectRolesModel();//Load Model
+                    $ProjectRolesModel = new ProjectRolesModel();//Load model
                     $ProjectRolesModel->project_id = $project_id;
                     $ProjectRolesModel->member_id = $selected_member_id;
                     $ProjectRolesModel->project_role = $selected_roles[$pr_key];
@@ -345,11 +349,11 @@ class ProjectController extends Controller
         }
 
 
-        // Insert Project Technologies Table
+        //Insert project technologies table
         if(isset($project_technologies)){
             foreach($project_technologies as $pr_key => $project_technology){
                 if($project_technology!=""){
-                    $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+                    $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load model
                     $ProjectTechnologiesModel->project_id = $project_id;
                     $ProjectTechnologiesModel->technology_name = $project_technology;
                     $ProjectTechnologiesModel->added_by = Session::get('user')['user_id'];
@@ -368,85 +372,9 @@ class ProjectController extends Controller
 
         echo json_encode($response);
 
-        /*$ProjectsModel = new ProjectsModel();// Load Model
-        $session = session();
-
-        //Assign Data To Variable
-        $project_id= $request->get('project_id');
-        $project_name= $request->get('project_name');
-        $start_date= $request->get('start_date');
-        $end_date= $request->get('end_date');
-        $total_hours= $request->get('total_hours');
-        $project_manager_id= $request->get('project_manager_id');
-        $project_type= $request->get('project_type');
-        $status= $request->get('status');
-
-        //Input Validations
-        $validator = Validator::make($request->all(), [
-            'project_name' => 'required|min:2|max:200',//Validation Rule
-            'start_date' => 'required',//Validation Rule
-            'end_date' => 'required',//Validation Rule
-            'total_hours' => 'required',//Validation Rule
-            'project_manager_id' => 'required',//Validation Rule
-            'project_type' => 'required',//Validation Rule
-            'status' => 'required',//Validation Rule
-        ],
-        [
-            'project_name.required' => 'Project name is required',//Validation Message
-            'project_name.min' => 'Project name must be at least 2 characters length',//Validation Message
-            'project_name.max' => 'First name cannot be exceed 200 characters length',//Validation Message
-            'start_date.required' => 'Start date is required',//Validation Message
-            'end_date.required' => 'End date is required',//Validation Message
-            'total_hours.required' => 'Total hour is required',//Validation Message
-            'project_manager_id.required' => 'Project manager is required',//Validation Message
-            'project_type.required' => 'Project type is required',//Validation Message
-            'status.required' => 'Status is required',//Validation Message
-            
-        ]);
-
-        if ($validator->fails()) {// If Validation Failure
-            // Failure Response Message
-            return Response::json(array(
-                'success' => false,
-                'errors' => $validator->getMessageBag()->toArray()
-
-            ), 422);
-        }else{// If Validation Not Failure
-            // Update Data
-            $updated = $ProjectsModel::where('project_id', $project_id)->update(
-                array(
-                    'project_name'   => $project_name,
-                    'start_date'   => $start_date,
-                    'end_date'   => $end_date,
-                    'total_hours'   => $total_hours,
-                    'project_manager_id'   => $project_manager_id,
-                    'project_type'   => $project_type,
-                    'status'   => $status,
-                    'updated_by'   => Session::get('user')['user_id'],
-                    'updated_date'   => date("Y-m-d H:i:s"),
-                )
-            );
-            
-
-            if($updated){
-                // Success Response Message
-                $response = array(
-                    'status' => true,
-                    'message' => "Project updated successfully."
-                );
-            }else{
-                // Failure Response Message 
-                $response = array(
-                    'status' => false,
-                    'message' => "Something went wrong."
-                );
-            }
-
-            echo json_encode($response);
-        }*/
     }
 
-    //Delete Project Process
+    //Delete project process
     public function deleteProjectProcess(Request $request)
     {
         $ProjectsModel = new ProjectsModel();
@@ -457,30 +385,30 @@ class ProjectController extends Controller
         $ProjectMembersModel = new ProjectMembersModel();
         $project_member_deleted = $ProjectMembersModel::where('project_id', $project_id)->delete();
 
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
         $project_task_deleted = $ProjectTasksModel::where('project_id', $project_id)->delete();
 
-        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load Model
+        $ApiTemplatesItemsModel = new ApiTemplatesItemsModel();//Load model
         $project_api_templates_deleted = $ApiTemplatesItemsModel::where('project_id', $project_id)->delete();
 
-        $ProjectRolesModel = new ProjectRolesModel();//Load Model
+        $ProjectRolesModel = new ProjectRolesModel();//Load model
         $project_role_deleted = $ProjectRolesModel::where('project_id', $project_id)->delete();
 
-        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load Model
+        $ProjectTechnologiesModel = new ProjectTechnologiesModel();//Load model
         $project_technology_deleted = $ProjectTechnologiesModel::where('project_id', $project_id)->delete();
         
-        // Delete Data
+        //Delete data
         $deleted = $ProjectsModel::where('project_id', $project_id)->delete();
             
 
         if($deleted){
-            // Success Response Message
+            //success response message
             $response = array(
                 'status' => true,
                 'message' => "Project deleted successfully."
             );
         }else{
-            // Failure Response Message
+            //failure response message
             $response = array(
                 'status' => false,
                 'message' => "Something went wrong."
@@ -492,9 +420,9 @@ class ProjectController extends Controller
 
     public function getProjectMemberList(Request $request){
 
-        $ProjectsModel = new ProjectsModel();//Load Model
-        $UsersModel = new UsersModel();//Load Model
-        $ProjectRolesModel = new ProjectRolesModel();//Load Model
+        $ProjectsModel = new ProjectsModel();//Load model
+        $UsersModel = new UsersModel();//Load model
+        $ProjectRolesModel = new ProjectRolesModel();//Load model
 
         $project_id = "";
 
@@ -508,7 +436,7 @@ class ProjectController extends Controller
 
         
 
-        $project_selected_members = $UsersModel->get_users_by_user_ids($member_ids);// Get All Projects
+        $project_selected_members = $UsersModel->get_users_by_user_ids($member_ids);//Get all projects
 
         ?>
 
@@ -546,8 +474,8 @@ class ProjectController extends Controller
             <div class="col-lg-2">
                 <div class="form-group">
                     <label>&nbsp;</label><br/>
-                    <a class="addmore" style="cursor: pointer;" onclick="add_more_role()">&nbsp;
-                        Add More Role
+                    <a class="addmore" style="cursor: pointer;" onclick="add_more_role()">
+                    Add Role
                     </a>
                 </div>
             </div>
@@ -598,34 +526,28 @@ class ProjectController extends Controller
 
         <?php
         
-        // $data['page_title'] = 'Projects';// Define Page Title
-        // $data['projects'] = $projects;// Pass Projects Data to Data Array
-        // $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
-
-        // return view('system/project/project',$data);
-        
     }
 
 
     public function assignTask($project_task_id){
 
-        $ProjectsModel = new ProjectsModel();//Load Model
-        $UsersModel = new UsersModel();//Load Model
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ProjectsModel = new ProjectsModel();//Load model
+        $UsersModel = new UsersModel();//Load model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
         $leader_id = Session::get('user')['user_id'];
 
-        $project_task = $ProjectTasksModel->get_task_by_project_task_id($project_task_id);// Get All task by id
+        $project_task = $ProjectTasksModel->get_task_by_project_task_id($project_task_id);//Get all tasks by ID
         
-        $data['page_title'] = 'Task('.$project_task->project_task.')';// Define Page Title
-        $data['project_task_id'] = $project_task_id;
-        $data['project_task'] = $project_task;// Pass Users Model to Data Array
-        $data['UsersModel'] = $UsersModel;// Pass Users Model to Data Array
+        $data['page_title'] = 'Task('.$project_task->project_task.')';//Define page title
+        $data['project_task_id'] = $project_task_id;//Pass project task ID to $data array
+        $data['project_task'] = $project_task;//Pass project task to $data array
+        $data['UsersModel'] = $UsersModel;//Pass users model to $data array
 
         return view('system/project/assign_task',$data);
         
     }
 
-    // Add Assign User Form Ajax View
+    //Add assign user form ajax view
     public function assignUserFormAjax(Request $request)
     {
         $UsersModel = new UsersModel();
@@ -640,35 +562,35 @@ class ProjectController extends Controller
         return Response::json(array('element' => View::make('system/project/add_task_user_form_aj',$data)->render()));
     }
 
-    //Update Task User Process
+    //Update task user process
     public function updateTaskUserProcess(Request $request)
     {
-        $UsersModel = new UsersModel();//Load Model
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
-        $session = session();//Session Initialized
+        $UsersModel = new UsersModel();//Load model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
+        $session = session();//Session initialized
 
-        //Assign Data To Variable
+        //Assign data to variable
         $project_task_id= $request->get('project_task_id');
         $user_id= $request->get('user_id');
 
-        //Input Validations
+        //Input validations
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required',//Validation Rule
+            'user_id' => 'required',//Validation rule
         ],
         [
-            'user_id.required' => 'User is required',//Validation Message
+            'user_id.required' => 'User is required',//Validation message
         ]);
 
-        if ($validator->fails()) {// If Validation Failure
-            // Failure Response Message
+        if ($validator->fails()) {//If validation fails
+            //Failure response message
             return Response::json(array(
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
 
             ), 422);
-        }else{// If Validation Not Failure
+        }else{//If validation succeeds
 
-            // Update Data
+            //Update data
             $updated = $ProjectTasksModel::where('project_task_id', $project_task_id)->update(
                 array(
                     'user_id'   => $user_id,
@@ -680,13 +602,13 @@ class ProjectController extends Controller
             
 
             if($updated){
-                // Success Response Message
+                //Success response message
                 $response = array(
                     'status' => true,
                     'message' => "User assigned successfully."
                 );
             }else{
-                // Failure Response Message
+                //Failure response message
                 $response = array(
                     'status' => false,
                     'message' => "Something went wrong."

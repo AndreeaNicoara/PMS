@@ -14,33 +14,33 @@ use Session;
 
 class UserController extends Controller
 {
-    // User Management
+    //User Management
     public function index(Request $request){
 
-        $UsersModel = new UsersModel();//Load Model
+        $UsersModel = new UsersModel();//Load model
 
-        $users = $UsersModel->get_all_users();// Get All Users
+        $users = $UsersModel->get_all_users();//Get all users
         
-        $data['page_title'] = 'Users';// Define Page Title
-        $data['users'] = $users;// Pass Users Data to Data Array
+        $data['page_title'] = 'Users';//Define page title
+        $data['users'] = $users;//Pass users data to $data array
 
         return view('system/user/user',$data);
         
     }
 
-    // Add User Ajax View
+    //Add user ajax view
     public function addUserFormAjax(Request $request)
     {
         return Response::json(array('element' => View::make('system/user/add_user_form_aj')->render()));
     }
 
-    //Add User Process
+    //Add user process
     public function addUserProcess(Request $request)
     {
-        $UsersModel = new UsersModel();//Load Model
-        $session = session();//Session Initialized
+        $UsersModel = new UsersModel();//Load model
+        $session = session();//Session initialized
 
-        //Assign Data To Variable
+        //Assign data to variable
         $first_name= $request->get('first_name');
         $last_name= $request->get('last_name');
         $user_type= $request->get('user_type');
@@ -48,43 +48,43 @@ class UserController extends Controller
         $password= $request->get('password');
         $status= $request->get('status');
 
-        //Input Validations
+        //Input validations
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|min:2|max:50',//Validation Rule
-            'last_name' => 'required|min:2|max:50',//Validation Rule
-            'user_type' => 'required',//Validation Rule
-            'username' => 'required|min:5|max:50',//Validation Rule
-            'password' => 'required|min:5|max:50',//Validation Rule
-            'status' => 'required',//Validation Rule
+            'first_name' => 'required|min:2|max:50',//Validation rule
+            'last_name' => 'required|min:2|max:50',//Validation rule
+            'user_type' => 'required',//Validation rule
+            'username' => 'required|min:5|max:50',//Validation rule
+            'password' => 'required|min:5|max:50',//Validation rule
+            'status' => 'required',//Validation rule
         ],
         [
-            'first_name.required' => 'First name is required',//Validation Message
-            'first_name.min' => 'Fist name must be at least 2 characters length',//Validation Message
-            'first_name.max' => 'First name cannot be exceed 50 characters length',//Validation Message
-            'last_name.required' => 'Last name is required',//Validation Message
-            'last_name.min' => 'Last name must be at least 2 characters length',//Validation Message
-            'last_name.max' => 'Last name cannot be exceed 50 characters length',//Validation Message
-            'user_type.required' => 'User type is required',//Validation Message
-            'login.required' => 'Username is required',//Validation Message
-            'login.min' => 'Username must be at least 5 characters length',//Validation Message
-            'login.max' => 'Username cannot be exceed 50 characters length',//Validation Message
-            'password.required' => 'Password is required',//Validation Message
-            'password.min' => 'Password must be at least 5 characters length',//Validation Message
-            'password.max' => 'Password cannot be exceed 50 characters length',//Validation Message
-            'status.required' => 'Status is required',//Validation Message
+            'first_name.required' => 'First name is required',//Validation message
+            'first_name.min' => 'Fist name must be at least 2 characters',//Validation message
+            'first_name.max' => 'First name cannot exceed 50 characters',//Validation message
+            'last_name.required' => 'Last name is required',//Validation message
+            'last_name.min' => 'Last name must be at least 2 characters',//Validation message
+            'last_name.max' => 'Last name cannot exceed 50 characters',//Validation message
+            'user_type.required' => 'User type is required',//Validation message
+            'login.required' => 'Username is required',//Validation message
+            'login.min' => 'Username must be at least 5 characters',//Validation message
+            'login.max' => 'Username cannot exceed 50 characters',//Validation message
+            'password.required' => 'Password is required',//Validation message
+            'password.min' => 'Password must be at least 5 characters',//Validation message
+            'password.max' => 'Password cannot exceed 50 characters',//Validation message
+            'status.required' => 'Status is required',//Validation message
             
         ]);
 
-        if ($validator->fails()) {// If Validation Failure
-            // Failure Response Message
+        if ($validator->fails()) {//If validation fails
+            //Failure response message
             return Response::json(array(
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
 
             ), 422);
-        }else{// If Validation Not Failure
+        }else{//If validation succeeds
 
-            // Assign All Data to Model
+            //Assign all data to model
             $UsersModel->first_name = $first_name;
             $UsersModel->last_name = $last_name;
             $UsersModel->user_type = $user_type;
@@ -98,13 +98,13 @@ class UserController extends Controller
             $added=$UsersModel->save();
 
             if($added){
-                // Success Response Message
+                //Success response message
                 $response = array(
                     'status' => true,
                     'message' => "User added successfully."
                 );
             }else{
-                // Failure Response Message
+                //Failure response message
                 $response = array(
                     'status' => false,
                     'message' => "Something went wrong."
@@ -115,26 +115,26 @@ class UserController extends Controller
         }
     }
 
-    // Edit User Ajax Page
+    //Edit user ajax page
     public function editUserFormAjax(Request $request)
     {
-        $user_id = $request->get('user_id');// Assign User Id to Variable
+        $user_id = $request->get('user_id');//Assign user ID to variable
 
-        $UsersModel = new UsersModel;//Load Model
+        $UsersModel = new UsersModel;//Load model
 
-        $user = $UsersModel->get_user_by_user_id($user_id);//Get User Details By User Id
+        $user = $UsersModel->get_user_by_user_id($user_id);//Get user details by user id
 
-        $data['user'] = $user;// Pass User Data to the $Data Array
+        $data['user'] = $user;//Pass user data to the $data array
         return Response::json(array('element' => View::make('system/user/edit_user_form_aj',$data)->render()));
     }
 
-    // Edit User Process
+    //Edit user process
     public function updateUserProcess(Request $request)
     {
-        $UsersModel = new UsersModel();// Load Model
+        $UsersModel = new UsersModel();//Load Model
         $session = session();
 
-        //Assign Data To Variable
+        //Assign data to variable
         $user_id= $request->get('user_id');
         $first_name= $request->get('first_name');
         $last_name= $request->get('last_name');
@@ -143,43 +143,43 @@ class UserController extends Controller
         $password= $request->get('password');
         $status= $request->get('status');
 
-        //Input Validations
+        //Input validations
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|min:2|max:50',//Validation Rule
-            'last_name' => 'required|min:2|max:50',//Validation Rule
-            'user_type' => 'required',//Validation Rule
-            'username' => 'required|min:5|max:50',//Validation Rule
-            'password' => 'required|min:5|max:50',//Validation Rule
-            'status' => 'required',//Validation Rule
+            'first_name' => 'required|min:2|max:50',//Validation rule
+            'last_name' => 'required|min:2|max:50',//Validation rule
+            'user_type' => 'required',//Validation rule
+            'username' => 'required|min:5|max:50',//Validation rule
+            'password' => 'required|min:5|max:50',//Validation rule
+            'status' => 'required',//Validation rule
         ],
         [
-            'first_name.required' => 'First name is required',//Validation Message
-            'first_name.min' => 'Fist name must be at least 2 characters length',//Validation Message
-            'first_name.max' => 'First name cannot be exceed 50 characters length',//Validation Message
-            'last_name.required' => 'Last name is required',//Validation Message
-            'last_name.min' => 'Last name must be at least 2 characters length',//Validation Message
-            'last_name.max' => 'Last name cannot be exceed 50 characters length',//Validation Message
-            'user_type.required' => 'User type is required',//Validation Message
-            'login.required' => 'Username is required',//Validation Message
-            'login.min' => 'Username must be at least 5 characters length',//Validation Message
-            'login.max' => 'Username cannot be exceed 50 characters length',//Validation Message
-            'password.required' => 'Password is required',//Validation Message
-            'password.min' => 'Password must be at least 5 characters length',//Validation Message
-            'password.max' => 'Password cannot be exceed 50 characters length',//Validation Message
-            'status.required' => 'Status is required',//Validation Message
+            'first_name.required' => 'First name is required',//Validation message
+            'first_name.min' => 'Fist name must be at least 2 characters',//Validation message
+            'first_name.max' => 'First name cannot exceed 50 characters',//Validation message
+            'last_name.required' => 'Last name is required',//Validation message
+            'last_name.min' => 'Last name must be at least 2 characters',//Validation message
+            'last_name.max' => 'Last name cannot exceed 50 characters',//Validation message
+            'user_type.required' => 'User type is required',//Validation message
+            'login.required' => 'Username is required',//Validation message
+            'login.min' => 'Username must be at least 5 characters',//Validation message
+            'login.max' => 'Username cannot exceed 50 characters',//Validation message
+            'password.required' => 'Password is required',//Validation message
+            'password.min' => 'Password must be at least 5 characters',//Validation message
+            'password.max' => 'Password cannot exceed 50 characters',//Validation message
+            'status.required' => 'Status is required',//Validation message
             
         ]);
 
-        if ($validator->fails()) {// If Validation Failure
-            // Failure Response Message
+        if ($validator->fails()) {//If validation fails
+            //Failure response message
             return Response::json(array(
                 'success' => false,
                 'errors' => $validator->getMessageBag()->toArray()
 
             ), 422);
-        }else{// If Validation Not Failure
+        }else{//If validation succeeds
 
-            // Update Data
+            //Update data
             $updated = $UsersModel::where('user_id', $user_id)->update(
                 array(
                     'first_name'   => $first_name,
@@ -196,13 +196,13 @@ class UserController extends Controller
             
 
             if($updated){
-                // Success Response Message
+                //Success response message
                 $response = array(
                     'status' => true,
                     'message' => "User updated successfully."
                 );
             }else{
-                // Failure Response Message  
+                //Failure response message  
                 $response = array(
                     'status' => false,
                     'message' => "Something went wrong."
@@ -213,7 +213,7 @@ class UserController extends Controller
         }
     }
 
-    //Delete User Process
+    //Delete user process
     public function deleteUserProcess(Request $request)
     {
         $UsersModel = new UsersModel();
@@ -221,18 +221,18 @@ class UserController extends Controller
 
         $user_id= $request->get('user_id');
 
-        // Delete Data
+        //Delete data
         $deleted = $UsersModel::where('user_id', $user_id)->delete();
             
 
         if($deleted){
-            // Success Response Message
+            //Success response message
             $response = array(
                 'status' => true,
                 'message' => "User deleted successfully."
             );
         }else{
-            // Failure Response Message  
+            //Failure response message  
             $response = array(
                 'status' => false,
                 'message' => "Something went wrong."

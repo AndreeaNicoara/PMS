@@ -54,25 +54,24 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 
         <script type="text/javascript">
-            //Login Form Submit
+            //Login form submit
             $(document).ready(function() {
-                $('.message-box').html("");// Clear Message Box Before Submit
-                var form = $('#loginForm'); //Get Login Form to the Variable by Id
+                $('.message-box').html("");//Clear message box before submit
+                var form = $('#loginForm'); //Get login form variable by ID
 
-                //Form Submit Button Clicked 
+                //Form submit button clicked 
                 form.on( 'submit', function(e) {
-                    e.preventDefault();//Stops the Default Action of a Selected Element from Happening by a User
+                    e.preventDefault();//Stops the default action of a selected element from happening
                     
-                    var username = $(this).find('input[name=username]').val();//Get Username to the Variable Using Name Attribute
-                    var password = $(this).find('input[name=password]').val();//Get Password to the Variable Using Name Attribute
+                    var username = $(this).find('input[name=username]').val();//Get username variable using name attribute
+                    var password = $(this).find('input[name=password]').val();//Get password variable using name attribute
 
                     $.ajaxSetup({
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') //Pass crf token on header using name attribute
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') //Pass CSRF token on header using name attribute
                         }
                     });
 
-                    //AJax Code Goes Here
                     $.ajax({
                         url     : "{{URL::to('login-authentication')}}",
                         type    : form.attr('method'),
@@ -83,12 +82,11 @@
                                 
                                 $.ajax({
                                     method: "POST",
-                                    url: "{{URL::to('login-form-ajax')}}", // Url To Login Validation
-                                    data: {"_token": "{{ csrf_token() }}"}, //Pass Data Here
+                                    url: "{{URL::to('login-form-ajax')}}", //URL To Login Validation
+                                    data: {"_token": "{{ csrf_token() }}"}, //Pass data 
                                     dataType: 'json',
                                     success: function(res_data) {
                                         if($.isEmptyObject(res_data.error)){
-                                            //alert(dep_data.element);
                                             $('#lcsFormContent').html(res_data.element);
                                             setTimeout("location.href = '{{URL::to('dashboard')}}';", 1000);
                                         }else{
@@ -100,13 +98,13 @@
                                 });
 
                             }else{
-                                $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');// Dispaly Main Form Error
+                                $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');//Display main form error
                             }
 
                         },
                         error: function( data ){
                             var errors = data.responseJSON;
-                            //Display Response Meesage According to Relevant Input Error Message
+                            //Display response message according to relevant input error message
                             $.each(data.responseJSON.errors, function (key, value) {
                                 $('.'+key+'-error').html(value);
                             });

@@ -49,7 +49,7 @@
                     <select class="form-control" id="inputStatus" name="status">
                         <option value="">Select Status</option>
                         <option value="0">Active</option>
-                        <option value="1">Deactive</option>
+                        <option value="1">Inactive</option>
                     </select>
                     <span class="text-danger input-error status-error"></span>
                 </div>
@@ -85,24 +85,24 @@
 
 $(document).ready(function(){
     
-    // Add User Form Submit
-    var form = $('#formAddUser'); //Get Login Form to the Variable by Id
+    //Add user form submit
+    var form = $('#formAddUser'); //Get login form variable by ID
 
     form.on( 'submit', function(e) {
-        e.preventDefault();//Stops the Default Action of a Selected Element from Happening by a User
+        e.preventDefault();//Stops the default action of a selected element from happening
 
-        $('.input-error').html("");// Clear All the Input Error Message 
+        $('.input-error').html("");//Clear all the input error messages 
 
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')//Pass crf token on header using name attribute
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')//Pass CSRF token on header using name attribute
             }
         });
-        //AJax Code Goes Here
+ 
         $.ajax({
-            url     : "{{URL::to('add-user-process')}}",// Url To User Add Process
+            url     : "{{URL::to('add-user-process')}}",
             type    : form.attr('method'),
-            data    : form.serialize(),//Pass Data Here
+            data    : form.serialize(),
             dataType: 'json',
             success : function ( data ){
                 if(data.status == true){
@@ -111,12 +111,12 @@ $(document).ready(function(){
                         window.location.href = "{{URL::to('manage/user')}}";
                     }, 1000);
                 }else{
-                    $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');// Dispaly Main Form Error
+                    $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');//Display main form error
                 }
             },
             error: function( data ){
                 var errors = data.responseJSON;
-                //Display Response Meesage According to Relevant Input Error Message
+                //Display response message according to relevant input error message
                 $.each(data.responseJSON.errors, function (key, value) {
                     $('.'+key+'-error').html(value);
                 });

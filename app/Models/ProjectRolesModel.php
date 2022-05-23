@@ -22,8 +22,7 @@ class ProjectRolesModel extends Model
 
 
     function get_all_assign_role_project_by_user_id($user_id){
-        //DB::enableQueryLog();
-        
+
         return DB::table('project_roles')->select('*')
         ->leftJoin('users', 'users.user_id', '=', 'project_roles.member_id')
         ->leftJoin('projects', 'projects.project_id', '=', 'project_roles.project_id')
@@ -31,8 +30,6 @@ class ProjectRolesModel extends Model
         ->orderBy("projects.project_id", "desc")
         ->groupBy("project_roles.project_id")
         ->get();
-        //dd(DB::getQueryLog());
-        //DB::disableQueryLog();
 
     }
 

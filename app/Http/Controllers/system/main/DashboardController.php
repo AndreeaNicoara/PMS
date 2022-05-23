@@ -12,32 +12,31 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-       // $this->username = $this->findUsername();
     }
     
-    // Main Dashboard
+    //Main dashboard
     public function index(Request $request){
 
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();//Load model
 
         if(Session()->has('user')){
 
-            $user_id = Session::get('user')['user_id'];// get user id by session
+            $user_id = Session::get('user')['user_id'];//Get user ID by session
 
-            $new_tasks_count = $ProjectTasksModel->get_all_new_tasks_count_by_user_id($user_id);// Get New Task Count
-            $open_tasks_count = $ProjectTasksModel->get_all_open_tasks_count_by_user_id($user_id);// Get Opened Task Count
-            $inprogress_tasks_count = $ProjectTasksModel->get_all_inprogress_tasks_count_by_user_id($user_id);// Get Inprogress Task Count
-            $completed_tasks_count = $ProjectTasksModel->get_all_completed_tasks_count_by_user_id($user_id);// Get Completed Task Count
+            $new_tasks_count = $ProjectTasksModel->get_all_new_tasks_count_by_user_id($user_id);//Get new task count
+            $open_tasks_count = $ProjectTasksModel->get_all_open_tasks_count_by_user_id($user_id);//Get opened task count
+            $inprogress_tasks_count = $ProjectTasksModel->get_all_inprogress_tasks_count_by_user_id($user_id);//Get Inprogress task count
+            $completed_tasks_count = $ProjectTasksModel->get_all_completed_tasks_count_by_user_id($user_id);//Get completed task count
 
-            $pending_tasks = $ProjectTasksModel->get_all_pending_task_by_user_id($user_id);// Get All the Pending Tasks(Not Completed)
+            $pending_tasks = $ProjectTasksModel->get_all_pending_task_by_user_id($user_id);//Get all the pending tasks(not completed)
 
-            $data['page_title'] = 'Dashboard';// Define Page Title
-            $data['pending_tasks'] = $pending_tasks;// Put Pending Task to $data array
+            $data['page_title'] = 'Dashboard';//Define page title
+            $data['pending_tasks'] = $pending_tasks;//Put pending task to $data array
 
-            $data['new_tasks_count'] = $new_tasks_count;// Put New Task to $data array
-            $data['open_tasks_count'] = $open_tasks_count;// Put Open Task to $data array
-            $data['inprogress_tasks_count'] = $inprogress_tasks_count;// Put Inprogress Task to $data array
-            $data['completed_tasks_count'] = $completed_tasks_count;// Put Completed Task to $data array
+            $data['new_tasks_count'] = $new_tasks_count;//Put new task to $data array
+            $data['open_tasks_count'] = $open_tasks_count;//Put open task to $data array
+            $data['inprogress_tasks_count'] = $inprogress_tasks_count;//Put Inprogress task to $data array
+            $data['completed_tasks_count'] = $completed_tasks_count;//Put completed task to $data array
 
             return view('system/main/dashboard',$data);
         }else{

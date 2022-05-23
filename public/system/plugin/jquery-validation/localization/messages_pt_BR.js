@@ -15,7 +15,7 @@
  */
 $.extend( $.validator.messages, {
 
-	// Core
+	//Core
 	required: "Este campo &eacute; requerido.",
 	remote: "Por favor, corrija este campo.",
 	email: "Por favor, forne&ccedil;a um endere&ccedil;o de email v&aacute;lido.",
@@ -34,7 +34,7 @@ $.extend( $.validator.messages, {
 	min: $.validator.format( "Por favor, forne&ccedil;a um valor maior ou igual a {0}." ),
 	step: $.validator.format( "Por favor, forne&ccedil;a um valor m&uacute;ltiplo de {0}." ),
 
-	// Metodos Adicionais
+	//Metodos Adicionais
 	maxWords: $.validator.format( "Por favor, forne&ccedil;a com {0} palavras ou menos." ),
 	minWords: $.validator.format( "Por favor, forne&ccedil;a pelo menos {0} palavras." ),
 	rangeWords: $.validator.format( "Por favor, forne&ccedil;a entre {0} e {1} palavras." ),

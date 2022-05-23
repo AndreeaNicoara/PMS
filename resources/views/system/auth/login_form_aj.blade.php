@@ -6,5 +6,5 @@
         @endif
     </h5>
     <img src="{{ asset('system/images/gif/1485.gif')}}" width='30px' style="margin-top:30px"/>
-    <p style="margin-top:30px">Please wait! you will be redirect to the system.</p>
+    <p style="margin-top:30px">Please wait! You will be redirected to the system.</p>
 </div>

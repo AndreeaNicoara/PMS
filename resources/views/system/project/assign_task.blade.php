@@ -8,12 +8,6 @@
         <li class="breadcrumb-item"><a href="{{URL::to('/manage/project')}}">Projects</a></li>
         <li class="breadcrumb-item active">{{ $page_title }}</li>
     </ol>
-
-    <!-- <div class="card mb-4">
-        <div class="card-body">
-            <a type="button" class="btn btn-success" onclick="assign_user('{{$project_task_id}}')">Add New</a>
-        </div>
-    </div> -->
     
     <div class="card mb-4">
         <div class="card-header">
@@ -54,8 +48,8 @@
                             
                             if($project_task->task_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
-                            }elseif($project_task->task_status=="OPEN"){
-                                echo "<span class='badge badge-primary'>OPEN</span>";
+                            }elseif($project_task->task_status=="Open"){
+                                echo "<span class='badge badge-primary'>Open</span>";
                             }elseif($project_task->task_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
                             }elseif($project_task->task_status=="COMPLETED"){
@@ -86,7 +80,7 @@
 
 @push('scripting')
 <script>
-//Load Assign User With Model
+//Load assign user with model
 function assign_user(project_task_id){
     $.ajax({
         type:'POST',

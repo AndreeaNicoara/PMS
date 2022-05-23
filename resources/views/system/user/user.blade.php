@@ -45,7 +45,7 @@
                             <?php if($user->status=="0"){ 
                                 echo "<span class='badge badge-success'>Active</span>";
                             }else{
-                                echo "<span class='badge badge-danger'>Deactive</span>";
+                                echo "<span class='badge badge-danger'>Inactive</span>";
                             }?>
                         </td>
                         <td>
@@ -74,7 +74,7 @@
 @push('scripting')
 <script>
 
-//Load User Add View With Model
+//Load "add user" view with model
 function user_add(){
     $.ajax({
         type:'POST',
@@ -89,7 +89,7 @@ function user_add(){
     });
   }
 
-//Load User Edit View With Model
+//Load "edit user" view with model
 function user_edit(user_id){
     $.ajax({
         type:'POST',
@@ -104,9 +104,9 @@ function user_edit(user_id){
     });
 }
 
-//Delete User With Ajax
+//Delete user with ajax
 function user_delete(user_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-user-process')}}",

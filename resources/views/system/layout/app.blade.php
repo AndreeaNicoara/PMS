@@ -69,9 +69,6 @@
                                     <a class="nav-link" href="{{URL::to('manage/role')}}">Roles</a>
                                     <a class="nav-link" href="{{URL::to('manage/task')}}">Tasks</a>
                                     
-                                    <!-- <a class="nav-link" href="{{URL::to('my_project/task')}}">Tasks</a> -->
-                                    <!-- <a class="nav-link" href="{{URL::to('my_project/assign_user')}}">Assign User</a> -->
-                                    <!-- <a class="nav-link" href="{{URL::to('manage/my_task')}}">My Tasks</a> -->
                                 </nav>
                             </div>
                             

@@ -51,7 +51,7 @@
                     <select class="form-control" id="inputStatus" name="status">
                         <option value="">Select Status</option>
                         <option value="0" <?php if($user->status="0"){ echo "selected"; } ?>>Active</option>
-                        <option value="1" <?php if($user->status="1"){ echo "selected"; } ?>>Deactive</option>
+                        <option value="1" <?php if($user->status="1"){ echo "selected"; } ?>>Inactive</option>
                     </select>
                     <span class="text-danger input-error status-error"></span>
                 </div>

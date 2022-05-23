@@ -43,7 +43,7 @@
                             if($task->task_status=="NEW"){ 
                                 echo "<span class='badge badge-danger'>New</span>";
                             }elseif($task->task_status=="OPENED"){
-                                echo "<span class='badge badge-primary'>OPEN</span>";
+                                echo "<span class='badge badge-primary'>Open</span>";
                             }elseif($task->task_status=="INPROGRESS"){
                                 echo "<span class='badge badge-warning'>In Progress</span>";
                             }elseif($task->task_status=="COMPLETED"){
@@ -92,7 +92,7 @@
   }
 
   function task_delete(project_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-task-process')}}",

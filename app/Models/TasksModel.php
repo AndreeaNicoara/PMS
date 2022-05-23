@@ -51,7 +51,7 @@ class TasksModel extends Model
         return DB::table('tasks')->select('tasks.*','projects.project_name')
         ->leftJoin('projects', 'projects.project_id', '=', 'tasks.project_id')
         ->where('tasks.user_id', $user_id)
-        ->where('tasks.status','=','OPEN')
+        ->where('tasks.status','=','Open')
         ->orderBy("tasks.task_id", "desc")
         ->get()->count();
 

@@ -88,30 +88,29 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 
         <script type="text/javascript">
-            //Login Form Submit
+            //Login form submit
             $(document).ready(function() {
 
-                var form = $('#signupForm'); //Get Login Form to the Variable by Id
+                var form = $('#signupForm'); //Get login form variable by ID
 
-                //Form Submit Button Clicked 
+                //Form submit button clicked 
                 form.on( 'submit', function(e) {
-                    $('.message-box').html("");// Clear Message Box Before Submit
-                    $('.input-error').html("");// Clear Error Messages Before Submit
-                    e.preventDefault();//Stops the Default Action of a Selected Element from Happening by a User
+                    $('.message-box').html("");//Clear message box before submit
+                    $('.input-error').html("");//Clear error messages before submit
+                    e.preventDefault();//Stops the default action of a selected element from happening
                     
-                    var first_name = $(this).find('input[name=first_name]').val();//Get First Name to the Variable Using Name Attribute
-                    var last_name = $(this).find('input[name=last_name]').val();//Get Last Name to the Variable Using Name Attribute
-                    var username = $(this).find('input[name=username]').val();//Get Username to the Variable Using Name Attribute
-                    var password = $(this).find('input[name=password]').val();//Get password to the Variable Using Name Attribute
-                    var password_confirmation = $(this).find('input[name=password_confirmation]').val();//Get Confirm Password to the Variable Using Name Attribute
+                    var first_name = $(this).find('input[name=first_name]').val();//Get first name variable using name attribute
+                    var last_name = $(this).find('input[name=last_name]').val();//Get last name variable using name attribute
+                    var username = $(this).find('input[name=username]').val();//Get username variable using name attribute
+                    var password = $(this).find('input[name=password]').val();//Get password variable using name attribute
+                    var password_confirmation = $(this).find('input[name=password_confirmation]').val();//Get confirm password variable using name attribute
 
                     $.ajaxSetup({
                         headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') //Pass crf token on header using name attribute
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') //Pass CSRF token on header using name attribute
                         }
                     });
 
-                    //AJax Code Goes Here
                     $.ajax({
                         url     : "{{URL::to('signup-process')}}",
                         type    : form.attr('method'),
@@ -119,17 +118,17 @@
                         dataType: 'json',
                         success : function ( data ){
                             if(data.status == true){
-                                $('.message-box').html('<div class="alert alert-success">'+ data.message +'</div>');// Dispaly Main Form Error
+                                $('.message-box').html('<div class="alert alert-success">'+ data.message +'</div>');//Display main form error
                                 setTimeout("location.href = '{{URL::to('/')}}';", 1000);
 
                             }else{
-                                $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');// Dispaly Main Form Error
+                                $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');//Display main form error
                             }
 
                         },
                         error: function( data ){
                             var errors = data.responseJSON;
-                            //Display Response Meesage According to Relevant Input Error Message
+                            //Display response message according to relevant input error message
                             $.each(data.responseJSON.errors, function (key, value) {
                                 $('.'+key+'-error').html(value);
                             });

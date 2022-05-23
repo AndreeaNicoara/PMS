@@ -168,7 +168,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-4 control-btn">
-                                        <a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove Customer</a></div>
+                                        <a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove member</a></div>
                                     </div>
                                     <?php } ?>
                                 </div>
@@ -202,6 +202,18 @@
                                             <span class="text-danger input-error project_tasks-error"></span>
                                         </div>
                                     </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="inputProjectTaskUser">Project Task Users </label>
+                                            <select class="form-control" id="inputProjectTaskUser" name="project_task_users[]" placeholder="">
+                                                <option value=""></option>
+                                                <?php foreach ($project_managers as $key => $project_manager) { ?>
+                                                    <option value="<?php echo $project_manager->user_id;?>"><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <span class="text-danger input-error project_task_users-error"></span>
+                                        </div>
+                                    </div>
                                     <div class="col-lg-4 control-btn">
                                     </div>
                                 </div>
@@ -215,6 +227,18 @@
                                                 <input type="text" class="form-control" id="inputProjectTasks" name="project_tasks[]" placeholder="" value="{{$project_task->project_task}}">
                                                     
                                                 <span class="text-danger input-error project_tasks-error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label for="inputProjectTaskUser">Project Task Users </label>
+                                                <select class="form-control" id="inputProjectTaskUser" name="project_task_users[]" placeholder="">
+                                                    <option value=""></option>
+                                                    <?php foreach ($project_managers as $key => $project_manager) { ?>
+                                                        <option value="<?php echo $project_manager->user_id;?>" <?php if($project_manager->user_id==$project_task->user_id){ echo "selected";}?>><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <span class="text-danger input-error project_task_users-error"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-4 control-btn">
@@ -283,8 +307,8 @@
 
                                     <div class="col-lg-4">
                                         <br/>
-                                        <a class="addmore" style="cursor: pointer;" onclick="add_more_technology()">&nbsp;
-                                            Add More Technology
+                                        <a class="addmore" style="cursor: pointer;" onclick="add_more_technology()">
+                                        Add Technology
                                         </a>
                                     </div>
 
@@ -321,7 +345,6 @@
                                     <div class="col-lg-4">
                                         <div class="form-group clearfix">
                                             <a href="javascript:;" class="form-wizard-previous-btn float-left">Previous</a>
-                                            <!-- <a href="javascript:;" class="form-wizard-submit float-right">Submit</a> -->
                                             <button type="submit" class="form-wizard-submit float-right"id="formAddProjectSubmit">Submit</button>
 
                                         </div>
@@ -363,7 +386,7 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function() {
-    // click on next button
+    //Click on next button
     jQuery('.form-wizard-next-btn').click(function() {
         var parentFieldset = jQuery(this).parents('.wizard-fieldset');
         var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
@@ -385,11 +408,11 @@
             currentActiveStep.removeClass('active').addClass('activated').next().addClass('active',"400");
             next.parents('.wizard-fieldset').next('.wizard-fieldset').addClass("show","400");
             jQuery(document).find('.wizard-fieldset').each(function(){
-                if(jQuery(this).hasClass('management')){// Check Class is exist as management
-                    $("#dynamic-project-member-view").html("");// Clear that area by ID
+                if(jQuery(this).hasClass('management')){//Check if management class exists
+                    $("#dynamic-project-member-view").html("");//Clear area by ID
                         var member_ids=[]; 
-                        $('select[name="project_members[]"] option:selected').each(function() {// Loop through all selected project members
-                         member_ids.push($(this).val());// Put selected members to array
+                        $('select[name="project_members[]"] option:selected').each(function() {//Loop through all selected project members
+                         member_ids.push($(this).val());//Put selected members to array
                         });
 
                         var project_id = $("#inputProjectId").val();
@@ -438,7 +461,7 @@
             });
         }
     });
-    //click on previous button
+    //Click on previous button
     jQuery('.form-wizard-previous-btn').click(function() {
         var counter = parseInt(jQuery(".wizard-counter").text());;
         var prev =jQuery(this);
@@ -462,7 +485,7 @@
             }
         });
     });
-    //click on form submit button
+    //Click on form submit button
     jQuery(document).on("click",".form-wizard .form-wizard-submit" , function(){
         var parentFieldset = jQuery(this).parents('.wizard-fieldset');
         var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
@@ -476,7 +499,7 @@
             }
         });
     });
-    // focus on input field check empty or not
+    //Focus on input field to check if it's empty or not
     jQuery(".form-control").on('focus', function(){
         var tmpThis = jQuery(this).val();
         if(tmpThis == '' ) {
@@ -499,77 +522,63 @@
 });
 
 
-// Add Project Member
+//Add project member
 $('.add-more-member').click(function() {
-  var cloneRow = $('.project_members').clone();// Clone Specific Row
+  var cloneRow = $('.project_members').clone();
 
-  cloneRow.removeClass('project_members');// Remove Class
-  cloneRow.addClass('remove');// Add Remove Class
-  cloneRow.show();// Remove Display None
-  cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove Customer</a>');
-  cloneRow.appendTo('.project_members_dynamic');// Dispaly Clone Data
+  cloneRow.removeClass('project_members');
+  cloneRow.addClass('remove');
+  cloneRow.show();
+  cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove member</a>');
+  cloneRow.appendTo('.project_members_dynamic');
 
 });
 
-//Remove Project Member
+//Remove project member
 function remove_member(element){
-    $(element).closest('.remove').remove();// Remove Closest Class
+    $(element).closest('.remove').remove();
 }
 
 
-// Add Project Task
+//Add project task
 $('.add-more-task').click(function() {
-  var cloneRow = $('.project_tasks').clone();// Clone Specific Row;
-  cloneRow.removeClass('project_tasks');// Remove Class
-  cloneRow.addClass('remove');// Add Remove Class
-  cloneRow.show();// Remove Display None
+  var cloneRow = $('.project_tasks').clone();;
+  cloneRow.removeClass('project_tasks');
+  cloneRow.addClass('remove');
+  cloneRow.show();
   cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-task" onclick="remove_task(this)">Remove Task</a>');
-  cloneRow.appendTo('.project_tasks_dynamic');// Dispaly Clone Data*/
+  cloneRow.appendTo('.project_tasks_dynamic');
 
 });
 
-//Remove Project Task
+//Remove project task
 function remove_task(element){
-    $(element).closest('.remove').remove();// Remove Closest Class
+    $(element).closest('.remove').remove();
 }
 
-//add more role
+//Add more roles
 function add_more_role(){
     $('.input-error').text("");
-    var selected_member_id = $("#inputProjectMemberList").val();// Get Selected Id
-    var selected_member_text = $("#inputProjectMemberList option:selected" ).text();// Get Selected Text
-
-    var selected_role = $("#inputProjectMemberRole").val();// Get Selected Role
-    var selected_estimate_hour = $("#inputProjectEstimateHour").val();// Get Selected Hour
+    var selected_member_id = $("#inputProjectMemberList").val();
+    var selected_member_text = $("#inputProjectMemberList option:selected" ).text();
+    var selected_role = $("#inputProjectMemberRole").val();
+    var selected_estimate_hour = $("#inputProjectEstimateHour").val();
 
     var rowCount = $('#projectRolesTable tbody tr').length;
     var newRowCount = rowCount+1;
 
-    //if(selected_member_id!="" && selected_role!="" && selected_estimate_hour!=""){
-
         $('#projectRolesTable tbody').append('<tr data-row="'+newRowCount+'"><td>'+selected_member_text+'<input type="hidden" name="selected_member_ids[]" value="'+selected_member_id+'"/></td><td>'+selected_role+'<input type="hidden" name="selected_roles[]" value="'+selected_role+'"/></td><td>'+selected_estimate_hour+'<input type="hidden" name="selected_estimate_hours[]" value="'+selected_estimate_hour+'"/></td><td><a onclick="remove_role(this)">Remove Role</a></td></tr>');
-    /*}else{
-        if(selected_member_id==""){
-            $(".project_member_list-error").text("Project memeber is required");
-        }
-        if(selected_role==""){
-            $(".project_member_role-error").text("Project role is required");
-        }
-        if(selected_estimate_hour==""){
-            $(".project_estimate_hour-error").text("Estimate hour is required");
-        }
-    }*/
 }
 
-//remove role
+//Remove role
 function remove_role(element){
-    $(element).closest('tr').remove();// Remove Closest Class
+    $(element).closest('tr').remove();
 }
 
-//add more technology
+//Add more technology
 function add_more_technology(){
     $('.input-error').text("");
-    var technologyused = $("#inputTechnologyUsed").val();// Get Technology
+    var technologyused = $("#inputTechnologyUsed").val();
 
     var rowCount = $('#projectTechnologyTable tbody tr').length;
     var newRowCount = rowCount+1;
@@ -584,9 +593,9 @@ function add_more_technology(){
     }
 }
 
-//remove technology
+//Remove technology
 function remove_technology(element){
-    $(element).closest('tr').remove();// Remove Closest Class
+    $(element).closest('tr').remove();
 }
 
 $(document).ready(function(){
