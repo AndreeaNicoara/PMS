@@ -19,27 +19,25 @@ use Session;
 
 class RoleController extends Controller
 {
-    // Role Management
     public function index(Request $request){
 
-        $ProjectTasksModel = new ProjectTasksModel();//Load Model
-        $ProjectRolesModel = new ProjectRolesModel();//Load Model
-        $UsersModel = new UsersModel();//Load Model
+        $ProjectTasksModel = new ProjectTasksModel();
+        $ProjectRolesModel = new ProjectRolesModel();
+        $UsersModel = new UsersModel();
 
         $user_id = Session::get('user')['user_id'];
 
-        $role_projects = $ProjectRolesModel->get_all_assign_role_project_by_user_id($user_id);// Get All Leader Projects
+        $role_projects = $ProjectRolesModel->get_all_assign_role_project_by_user_id($user_id);
         
-        $data['page_title'] = 'Roles';// Define Page Title
-        $data['role_projects'] = $role_projects;// Pass Projects Data to Data Array
-        $data['ProjectTasksModel'] = $ProjectTasksModel;// Pass Projects Data to Data Array
-        $data['UsersModel'] = $UsersModel;// Pass Projects Data to Data Array
+        $data['page_title'] = 'Roles';
+        $data['role_projects'] = $role_projects;
+        $data['ProjectTasksModel'] = $ProjectTasksModel;
+        $data['UsersModel'] = $UsersModel;
 
         return view('system/role/role',$data);
         
     }
 
-    // View Role Ajax View
     public function viewRoleFormAjax(Request $request)
     {
         $UsersModel = new UsersModel();
@@ -48,7 +46,7 @@ class RoleController extends Controller
         $project_id   = $request->get('project_id');
         $user_id   = Session::get('user')['user_id'];
 
-        $role_projects = $ProjectRolesModel->get_all_assign_roles_by_project_id_and_user_id($project_id,$user_id);// Get All Leader Projects
+        $role_projects = $ProjectRolesModel->get_all_assign_roles_by_project_id_and_user_id($project_id,$user_id);
 
         $data['role_projects'] = $role_projects;
          

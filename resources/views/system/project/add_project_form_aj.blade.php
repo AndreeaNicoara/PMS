@@ -179,6 +179,20 @@
                                                 
                                             <span class="text-danger input-error project_tasks-error"></span>
                                         </div>
+
+
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="inputProjectTaskUser">Project Task Users </label>
+                                            <select class="form-control" id="inputProjectTaskUser" name="project_task_users[]" placeholder="">
+                                                <option value=""></option>
+                                                <?php foreach ($project_managers as $key => $project_manager) { ?>
+                                                    <option value="<?php echo $project_manager->user_id;?>"><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
+                                                <?php } ?>
+                                            </select>
+                                            <span class="text-danger input-error project_task_users-error"></span>
+                                        </div>
                                     </div>
                                     <div class="col-lg-4 control-btn">
                                     </div>
@@ -246,8 +260,8 @@
 
                                     <div class="col-lg-4">
                                         <br/>
-                                        <a class="addmore" style="cursor: pointer;" onclick="add_more_technology()">&nbsp;
-                                            Add More Technology
+                                        <a class="addmore" style="cursor: pointer;" onclick="add_more_technology()">
+                                            Add technology
                                         </a>
                                     </div>
 
@@ -304,89 +318,6 @@
                 </div>
             </div>
         </section>
-        <!-- <div class="row">
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="inputProjectName">Project Name <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="inputProjectName" name="project_name">
-                    <span class="text-danger input-error project_name-error"></span>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="inputStartDate">Start Date <span class="required">*</span></label>
-                    <input type="date" class="form-control" id="inputStartDate" name="start_date">
-                    <span class="text-danger input-error start_date-error"></span>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="inputEndDate">End Date <span class="required">*</span></label>
-                    <input type="date" class="form-control" id="inputEndDate" name="end_date">
-                    <span class="text-danger input-error end_date-error"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="inputProjectManagerId">Project Manager <span class="required">*</span></label>
-                    <select class="form-control" id="inputProjectManagerId" name="project_manager_id">
-                        <option value="">Select Project Manager</option>
-                        <?php foreach ($project_managers as $key => $project_manager) { ?>
-                            <option value="<?php echo $project_manager->user_id;?>"><?php echo $project_manager->first_name.' '.$project_manager->last_name;;?></option>
-                        <?php } ?>
-                    </select>
-                    <span class="text-danger input-error status-error"></span>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="form-group">
-                    <label for="inputProjectType">Project Type <span class="required">*</span></label>
-                    <select class="form-control" id="inputProjectType" name="project_type">
-                        <option value="">Select Project Type</option>
-                        <option value="REST_API_MD">Rest API Template - Multimedia Designer</option>
-                        <option value="REST_API_WD">Rest API Template - Web Development</option>
-                        <option value="EMPTY_TEMPLATE">Empty Template</option>
-                    </select>
-                    <span class="text-danger input-error project_type-error"></span>
-                </div>
-            </div>
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="inputTotalHours">Total Hour(s) <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="inputTotalHours" name="total_hours">
-                    <span class="text-danger input-error total_hours-error"></span>
-                </div>
-            </div>
-
-            <div class="col-lg-2">
-                <div class="form-group">
-                    <label for="inputStatus">Status <span class="required">*</span></label>
-                    <select class="form-control" id="inputStatus" name="status">
-                        <option value="">Select Status</option>
-                        <option value="0">Active</option>
-                        <option value="1">Deactive</option>
-                    </select>
-                    <span class="text-danger input-error status-error"></span>
-                </div>
-            </div>
-        </div>
-
-    
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="message-box" style="text-align:center;">
-                    
-                </div>
-            </div>
-        </div> -->
-
-        
-
         
     </div>
 
@@ -404,7 +335,7 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function() {
-    // click on next button
+    
     jQuery('.form-wizard-next-btn').click(function() {
         var parentFieldset = jQuery(this).parents('.wizard-fieldset');
         var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
@@ -426,11 +357,11 @@
             currentActiveStep.removeClass('active').addClass('activated').next().addClass('active',"400");
             next.parents('.wizard-fieldset').next('.wizard-fieldset').addClass("show","400");
             jQuery(document).find('.wizard-fieldset').each(function(){
-                if(jQuery(this).hasClass('management')){// Check Class is exist as management
-                    $("#dynamic-project-member-view").html("");// Clear that area by ID
+                if(jQuery(this).hasClass('management')){
+                    $("#dynamic-project-member-view").html("");
                         var member_ids=[]; 
-                        $('select[name="project_members[]"] option:selected').each(function() {// Loop through all selected project members
-                         member_ids.push($(this).val());// Put selected members to array
+                        $('select[name="project_members[]"] option:selected').each(function() {
+                         member_ids.push($(this).val());
                         });
 
                         $.ajaxSetup({
@@ -477,7 +408,7 @@
             });
         }
     });
-    //click on previous button
+    
     jQuery('.form-wizard-previous-btn').click(function() {
         var counter = parseInt(jQuery(".wizard-counter").text());;
         var prev =jQuery(this);
@@ -501,7 +432,7 @@
             }
         });
     });
-    //click on form submit button
+    
     jQuery(document).on("click",".form-wizard .form-wizard-submit" , function(){
         var parentFieldset = jQuery(this).parents('.wizard-fieldset');
         var currentActiveStep = jQuery(this).parents('.form-wizard').find('.form-wizard-steps .active');
@@ -515,7 +446,7 @@
             }
         });
     });
-    // focus on input field check empty or not
+    
     jQuery(".form-control").on('focus', function(){
         var tmpThis = jQuery(this).val();
         if(tmpThis == '' ) {
@@ -538,77 +469,63 @@
 });
 
 
-// Add Project Member
+
 $('.add-more-member').click(function() {
-  var cloneRow = $('.project_members').clone();// Clone Specific Row
+  var cloneRow = $('.project_members').clone();
 
-  cloneRow.removeClass('project_members');// Remove Class
-  cloneRow.addClass('remove');// Add Remove Class
-  cloneRow.show();// Remove Display None
-  cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove Customer</a>');
-  cloneRow.appendTo('.project_members_dynamic');// Dispaly Clone Data
+  cloneRow.removeClass('project_members');
+  cloneRow.addClass('remove');
+  cloneRow.show();
+  cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-member" onclick="remove_member(this)">Remove member</a>');
+  cloneRow.appendTo('.project_members_dynamic');
 
 });
 
-//Remove Project Member
+
 function remove_member(element){
-    $(element).closest('.remove').remove();// Remove Closest Class
+    $(element).closest('.remove').remove();
 }
 
 
-// Add Project Task
+
 $('.add-more-task').click(function() {
-  var cloneRow = $('.project_tasks').clone();// Clone Specific Row;
-  cloneRow.removeClass('project_tasks');// Remove Class
-  cloneRow.addClass('remove');// Add Remove Class
-  cloneRow.show();// Remove Display None
+  var cloneRow = $('.project_tasks').clone();;
+  cloneRow.removeClass('project_tasks');
+  cloneRow.addClass('remove');
+  cloneRow.show();
   cloneRow.find('.control-btn').append('<a href="#" class="remove-field btn-remove-task" onclick="remove_task(this)">Remove Task</a>');
-  cloneRow.appendTo('.project_tasks_dynamic');// Dispaly Clone Data*/
+  cloneRow.appendTo('.project_tasks_dynamic');
 
 });
 
-//Remove Project Task
+
 function remove_task(element){
-    $(element).closest('.remove').remove();// Remove Closest Class
+    $(element).closest('.remove').remove();
 }
 
-//add more role
+
 function add_more_role(){
     $('.input-error').text("");
-    var selected_member_id = $("#inputProjectMemberList").val();// Get Selected Id
-    var selected_member_text = $("#inputProjectMemberList option:selected" ).text();// Get Selected Text
+    var selected_member_id = $("#inputProjectMemberList").val();
+    var selected_member_text = $("#inputProjectMemberList option:selected" ).text();
 
-    var selected_role = $("#inputProjectMemberRole").val();// Get Selected Role
-    var selected_estimate_hour = $("#inputProjectEstimateHour").val();// Get Selected Hour
+    var selected_role = $("#inputProjectMemberRole").val();
+    var selected_estimate_hour = $("#inputProjectEstimateHour").val();
 
     var rowCount = $('#projectRolesTable tbody tr').length;
     var newRowCount = rowCount+1;
 
-    //if(selected_member_id!="" && selected_role!="" && selected_estimate_hour!=""){
-
         $('#projectRolesTable tbody').append('<tr data-row="'+newRowCount+'"><td>'+selected_member_text+'<input type="hidden" name="selected_member_ids[]" value="'+selected_member_id+'"/></td><td>'+selected_role+'<input type="hidden" name="selected_roles[]" value="'+selected_role+'"/></td><td>'+selected_estimate_hour+'<input type="hidden" name="selected_estimate_hours[]" value="'+selected_estimate_hour+'"/></td><td><a onclick="remove_role(this)">Remove Role</a></td></tr>');
-    /*}else{
-        if(selected_member_id==""){
-            $(".project_member_list-error").text("Project memeber is required");
-        }
-        if(selected_role==""){
-            $(".project_member_role-error").text("Project role is required");
-        }
-        if(selected_estimate_hour==""){
-            $(".project_estimate_hour-error").text("Estimate hour is required");
-        }
-    }*/
+
 }
 
-//remove role
 function remove_role(element){
-    $(element).closest('tr').remove();// Remove Closest Class
+    $(element).closest('tr').remove();
 }
 
-//add more technology
 function add_more_technology(){
     $('.input-error').text("");
-    var technologyused = $("#inputTechnologyUsed").val();// Get Technology
+    var technologyused = $("#inputTechnologyUsed").val();
 
     var rowCount = $('#projectTechnologyTable tbody tr').length;
     var newRowCount = rowCount+1;
@@ -623,9 +540,8 @@ function add_more_technology(){
     }
 }
 
-//remove technology
 function remove_technology(element){
-    $(element).closest('tr').remove();// Remove Closest Class
+    $(element).closest('tr').remove();
 }
 
 
@@ -644,7 +560,6 @@ $(document).ready(function(){
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        //alert("hello");
         $.ajax({
             url     : "{{URL::to('add-project-process')}}",
             type    : form.attr('method'),

@@ -8,12 +8,6 @@
         <li class="breadcrumb-item"><a href="{{URL::to('/manage/project')}}">Projects</a></li>
         <li class="breadcrumb-item active">{{ $page_title }}</li>
     </ol>
-
-    <!-- <div class="card mb-4">
-        <div class="card-body">
-            <a type="button" class="btn btn-success" onclick="assign_user('{{$project_task_id}}')">Add New</a>
-        </div>
-    </div> -->
     
     <div class="card mb-4">
         <div class="card-header">
@@ -86,7 +80,6 @@
 
 @push('scripting')
 <script>
-//Load Assign User With Model
 function assign_user(project_task_id){
     $.ajax({
         type:'POST',

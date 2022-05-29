@@ -131,7 +131,7 @@
 
 @push('scripting')
 <script>
-//Load Project Add View With Model
+
 function project_add(){
     $.ajax({
         type:'POST',
@@ -146,7 +146,6 @@ function project_add(){
     });
 }
 
-//Load Project Edit View With Model
 function project_edit(project_id){
     $.ajax({
         type:'POST',
@@ -161,9 +160,8 @@ function project_edit(project_id){
     });
 }
 
-//Delete Project With Ajax
 function project_delete(project_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-project-process')}}",

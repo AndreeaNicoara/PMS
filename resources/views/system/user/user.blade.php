@@ -74,7 +74,6 @@
 @push('scripting')
 <script>
 
-//Load User Add View With Model
 function user_add(){
     $.ajax({
         type:'POST',
@@ -89,7 +88,6 @@ function user_add(){
     });
   }
 
-//Load User Edit View With Model
 function user_edit(user_id){
     $.ajax({
         type:'POST',
@@ -104,9 +102,8 @@ function user_edit(user_id){
     });
 }
 
-//Delete User With Ajax
 function user_delete(user_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-user-process')}}",

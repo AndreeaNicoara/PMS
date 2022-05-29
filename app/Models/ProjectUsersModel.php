@@ -15,7 +15,6 @@ class ProjectUsersModel extends Model
 
     
     function get_all_assign_project_users($project_id){
-        //DB::enableQueryLog();
         
         return DB::table('project_users')->select('*')
         ->leftJoin('users', 'users.user_id', '=', 'project_users.user_id')
@@ -23,13 +22,10 @@ class ProjectUsersModel extends Model
         ->where("project_users.project_id",$project_id)
         ->orderBy("users.user_id", "desc")
         ->get();
-        //dd(DB::getQueryLog());
-        //DB::disableQueryLog();
 
     }
 
     function get_all_assign_project_by_user_id($user_id){
-        //DB::enableQueryLog();
         
         return DB::table('project_users')->select('*')
         ->leftJoin('users', 'users.user_id', '=', 'project_users.user_id')
@@ -37,8 +33,6 @@ class ProjectUsersModel extends Model
         ->where("project_users.user_id",$user_id)
         ->orderBy("projects.project_id", "desc")
         ->get();
-        //dd(DB::getQueryLog());
-        //DB::disableQueryLog();
 
     }
     

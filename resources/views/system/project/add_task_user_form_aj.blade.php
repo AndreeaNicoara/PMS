@@ -50,26 +50,26 @@
 
 $(document).ready(function(){
     
-    // Update User Form Submit
-    var form = $('#formAddTaskUser'); //Get Login Form to the Variable by Id
+    
+    var form = $('#formAddTaskUser'); 
 
     form.on( 'submit', function(e) {
-        e.preventDefault();//Stops the Default Action of a Selected Element from Happening by a User
+        e.preventDefault();
 
-        $('.input-error').html("");// Clear All the Input Error Message 
+        $('.input-error').html("");
 
         var project_task_id = $("#inputProjectTaskId").val();
 
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')//Pass crf token on header using name attribute
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        //AJax Code Goes Here
+       
         $.ajax({
-            url     : "{{URL::to('project/update-task-user-process')}}",// Url To Task User Add Process
+            url     : "{{URL::to('project/update-task-user-process')}}",
             type    : form.attr('method'),
-            data    : form.serialize(),//Pass Data Here
+            data    : form.serialize(),
             dataType: 'json',
             success : function ( data ){
                 if(data.status == true){
@@ -78,12 +78,12 @@ $(document).ready(function(){
                         window.location.href = "{{URL::to('project/assign-task/')}}/"+project_task_id;
                     }, 1000);
                 }else{
-                    $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');// Dispaly Main Form Error
+                    $('.message-box').html('<div class="alert alert-danger">'+ data.message +'</div>');
                 }
             },
             error: function( data ){
                 var errors = data.responseJSON;
-                //Display Response Meesage According to Relevant Input Error Message
+                
                 $.each(data.responseJSON.errors, function (key, value) {
                     $('.'+key+'-error').html(value);
                 });

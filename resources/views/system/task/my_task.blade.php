@@ -92,7 +92,7 @@
   }
 
   function task_delete(project_id){
-    if(confirm("Are you sure do you want to delete this record?")){
+    if(confirm("Are you sure you want to delete this record?")){
         $.ajax({
             type:'POST',
             url: "{{URL::to('delete-task-process')}}",

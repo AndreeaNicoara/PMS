@@ -124,7 +124,7 @@
 
 @push('scripting')
 <script>
-//Load Project Role View With Model
+
 function role_view(project_id){
     $.ajax({
         type:'POST',
