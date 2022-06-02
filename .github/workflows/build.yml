@@ -66,13 +66,11 @@ jobs:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
-  # This piece is optional (continuous deployment).
+  # Continuous deployment
   deploy:
     runs-on: ubuntu-latest
     needs: laravel
-    # This will deploy your code to your server if it is merged into master.
-    # You can change the branch to a common name like develop or staging.
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Send to AWS # You can set this up with Forge, AWS, Vapor, Vercel etc.
-        run: curl --location --request POST ${{ secrets.AWS_DEV_URI }} # Add a secret to your repo
+      - name: Send to AWS
+        run: curl --location --request POST ${{ secrets.AWS_DEV_URI }} # Adds a secret to the repo
