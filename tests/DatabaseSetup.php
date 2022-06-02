@@ -33,7 +33,7 @@ trait DatabaseSetup
     {
         if (!static::$migrated) {  //if recent migrations were ran on the regular DB
             $this->whenMigrationsChange(function() {
-                $this->artisan('migrate:fresh --seed'); //the test DB will run the new php artisan migrate
+                $this->artisan('migrate:fresh --seed'); //the test DB will run the new php artisan migrate seed
                 $this->app[Kernel::class]->setArtisan(null);
             });
             static::$migrated = true;
