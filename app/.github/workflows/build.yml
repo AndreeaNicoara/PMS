@@ -72,7 +72,7 @@ jobs:
     needs: laravel
     # This will deploy your code to your server if it is merged into master.
     # You can change the branch to a common name like develop or staging.
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Send to AWS # You can set this up with Forge, AWS, Vapor, Vercel etc.
         run: curl --location --request POST ${{ secrets.AWS_DEV_URI }} # Add a secret to your repo
