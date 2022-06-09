@@ -29,7 +29,7 @@ trait DatabaseSetup
         $this->app[Kernel::class]->setArtisan(null);
     }
 
-    protected function setupTestDatabase() //checks if the test DB is in sync with the dev/main DB
+    protected function setupTestDatabase() //checks if the test DB is in sync with the main DB
     {
         if (!static::$migrated) {  //if recent migrations were ran on the regular DB
             $this->whenMigrationsChange(function() {
